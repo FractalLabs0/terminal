@@ -12,7 +12,7 @@ export const echo = async (args: string[]): Promise<string> => {
 };
 
 export const whoami = async (args: string[]): Promise<string> => {
-  return 'guest';
+  return 'adventurer';
 };
 
 export const date = async (args: string[]): Promise<string> => {
