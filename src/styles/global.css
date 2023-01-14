@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'CascadiaCode';
+  font-family: 'Nebula';
   src: url(/assets/fonts/Nebula-Bold.ttf);
   display: swap;
 }
 
 * {
-  font-family: 'CascadiaCode', monospace;
+  font-family: 'Nebula', monospace;
 }
 
 html,
