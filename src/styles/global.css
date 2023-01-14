@@ -8,9 +8,17 @@
   display: swap;
 }
 
+@font-face {
+  font-family: 'Cascadia';
+  src: url(/assets/fonts/CascadiaCode.ttf);
+  display: swap;
+}
+
 * {
   font-family: 'Nebula', monospace;
 }
+
+
 
 html,
 body,
