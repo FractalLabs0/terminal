@@ -26,9 +26,9 @@ export const gui = async (args: string[]): Promise<string> => {
 };
 
 export const email = async (args: string[]): Promise<string> => {
-  window.open('mailto:hi@nm4tt72.com');
+  window.open('mailto:portal@fractallabs.org');
 
-  return 'Opening mailto:hi@m4tt72.com...';
+  return 'Opening mailto:portal@fractallabs.org...';
 };
 
 export const vi = async (args: string[]): Promise<string> => {
