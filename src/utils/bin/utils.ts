@@ -1,6 +1,6 @@
 import packageJson from '../../../package.json';
 import * as bin from './index';
-import imageToAdd from "./../assets/images/woofv1.png";
+
 
 
 export const help = async (args: string[]): Promise<string> => {
