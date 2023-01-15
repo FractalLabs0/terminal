@@ -1,6 +1,5 @@
 import packageJson from '../../../package.json';
 import * as bin from './index';
-import imageToAdd from "./../assets/images/woofv1.png";
 
 
 export const help = async (args: string[]): Promise<string> => {
@@ -10,7 +9,7 @@ export const help = async (args: string[]): Promise<string> => {
 };
 
 export const sudo = async (args?: string[]): Promise<string> => {
- return <img src={imageToAdd} alt="Image" />;
+
 };
 
 export const whoami = async (args: string[]): Promise<string> => {
