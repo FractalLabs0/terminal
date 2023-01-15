@@ -9,7 +9,7 @@ export const help = async (args: string[]): Promise<string> => {
 };
 
 export const sudo = async (args?: string[]): Promise<string> => {
-  
+   return 'adventurer';
 };
 
 export const whoami = async (args: string[]): Promise<string> => {
