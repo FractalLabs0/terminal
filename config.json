@@ -1,8 +1,8 @@
 {
   "bioUrl": "https://fractallabs.org",
   "social": {
-    "reddit": "FractalLabs",
-    "twitter": "FractalLabsOrg",
+    "Reddit": "FractalLabs",
+    "Twitter": "FractalLabsOrg",
   },
   "theme": "ibm3270(highcontrast)",
   "border": true
