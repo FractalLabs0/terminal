@@ -9,7 +9,7 @@ export const help = async (args: string[]): Promise<string> => {
 };
 
 export const sudo = async (args?: string[]): Promise<string> => {
-   return 'The FractalLabs simulation size is limited by the organisation ressources. The simulation grows as Fractal Labs augments its capacities';
+   return 'The Fractal Labs simulation size is limited by the organisation ressources. The simulation grows as Fractal Labs augments its capacities';
 };
 
 export const whoami = async (args: string[]): Promise<string> => {
@@ -50,9 +50,9 @@ export const banner = (args?: string[]): string => {
         │         DEPT. 33               │       │                              │ x
   Rift  │                                │       │                              │
         │  Sentrysoft©                   │       │                              │
-        │                   Nomo        xxxxx┼xxxxx                             ├────────► ...
-x       │  Company2                      │       │                              │ x
-        │                                │ Nomo  │                              │
+        │                   Nomo        xxxxx┼xxxxx                             ├────────► ...The Fractal Labs simulation size 
+x       │  Company2                      │       │                              │ x           is limited by the organisation ressources. 
+        │                                │ Nomo  │                              │             The simulation grows as Fractal Labs augments its capacities...
     x   │  Company3                      │       │                              │
         │                                │       │                              │
  x      │  Company4                      │       │                              │
