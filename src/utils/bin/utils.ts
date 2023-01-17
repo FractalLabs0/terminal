@@ -40,7 +40,28 @@ export const banner = (args?: string[]): string => {
  ##::::::: ##::. ##:: ##.... ##: ##::: ##:::: ##:::: ##.... ##: ##:::::::
  ##::::::: ##:::. ##: ##:::: ##:. ######::::: ##:::: ##:::: ##: ########:
 ..::::::::..:::::..::..:::::..:::......::::::..:::::..:::::..::........::
-
+                                     
+                        x         x                                      x
+          x     x            x                           x      Rift        x
+            x    x  Rift      x      x           x     x         x        x
+      x ┌────────────────────────────────┐       ┌──────────────────────────────┐
+        │     NOMO'S HOMEWORLD           │   Rift│            GUL1M22           │
+ x   x  │                                │       │                              │
+        │         DEPT. 33               │       │                              │ x
+  Rift  │                                │       │                              │
+        │  Sentrysoft©                   │       │                              │
+        │                   Nomo        xxxxx┼xxxxx                             ├────────► ...
+x       │  Company2                      │       │                              │ x
+        │                                │ Nomo  │                              │
+    x   │  Company3                      │       │                              │
+        │                                │       │                              │
+ x      │  Company4                      │       │                              │
+        │                                │       │                              │
+        └────────────────────────────────┘       └──────────────────────────────┘
+     x                                         Rift
+        x             x            x                                     Rift
+        x                                    x      x        x Rift
+                Rift          x                        x
 Type 'help' to see list of available commands.
 
 `;
