@@ -6,7 +6,7 @@ export const reddit = async (args: string[]): Promise<string> => {
   return 'Opening reddit...';
 };
 
-export const github = async (args: string[]): Promise<string> => {
+export const twitter = async (args: string[]): Promise<string> => {
   window.open(`https://twitter.com/${config.social.twitter}/`);
 
   return 'Opening twitter...';
