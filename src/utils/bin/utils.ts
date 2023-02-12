@@ -13,12 +13,10 @@ export const sudo = async (args?: string[]): Promise<string> => {
 };
 
 export const whoami = async (args: string[]): Promise<string> => {
-  return 'adventurer';
+  return `You are logged in to the Fractal Labs console via remote access. Your clearance level is: Operator: Department. Please access a Fractal Labs console to verify identity.
+This action cannot be performed remotely.`;
 };
 
-export const date = async (args: string[]): Promise<string> => {
-  return new Date().toString();
-};
 
 export const email = async (args: string[]): Promise<string> => {
   window.open('mailto:portal@fractallabs.org');
@@ -50,8 +48,8 @@ export const banner = (args?: string[]): string => {
         │         DEPT. 33               │       │                              │ x
   Rift  │                                │       │                              │
         │  Sentrysoft©                   │       │                              │
-        │                   Nomo        xxxxx┼xxxxx                             ├────────► ...The Fractal Labs simulation size 
-x       │  Company2                      │       │                              │ x           is limited by the organisation ressources. 
+        │                               xxxxx┼xxxxx                             ├────────► ...The Fractal Labs simulation size 
+x       │  Dahae                         │       │                              │ x           is limited by the organisation ressources. 
         │                                │ Nomo  │                              │             The simulation grows as Fractal Labs augments its capacities...
     x   │  Company3                      │       │                              │
         │                                │       │                              │
