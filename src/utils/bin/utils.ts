@@ -1,6 +1,8 @@
 import packageJson from '../../../package.json';
 import * as bin from './index';
 import imageToAdd from './../assets/images/woofv1.png';
+import * as readline from 'readline';
+
 
 export const help = async (args: string[]): Promise<string> => {
   const commands = Object.keys(bin).sort().join('\n ');
@@ -63,4 +65,6 @@ x       │  Dahae                         │       │                        
 Type 'help' to see list of available commands.
 
 `;
+
+
 };
