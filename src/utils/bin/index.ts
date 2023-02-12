@@ -1,3 +1,3 @@
 export * from './social';
 export * from './utils';
-export * from './game'
+export * from './game';
