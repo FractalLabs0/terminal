@@ -1,6 +1,6 @@
 import readline from 'readline';
 export const textAdventure = async (): Promise<string> => {
- const exitMessage = "Thanks for playing!";
+
 
 const rl = readline.createInterface({
   input: process.stdin,
@@ -93,7 +93,7 @@ const play = async (): Promise<void> => {
       case 'quit':
         console.log('Goodbye!');
         rl.close();
-       return exitMessage;
+        return;
       default:
         console.log(`Unknown command: ${command}. Type "help" for a list of commands.`);
         break;
