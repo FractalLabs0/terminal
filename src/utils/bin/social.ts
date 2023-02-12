@@ -6,10 +6,14 @@ export const instagram = async (args: string[]): Promise<string> => {
   return 'Opening instagram...';
 };
 
-export const github = async (args: string[]): Promise<string> => {
-  window.open(`https://github.com/${config.social.github}/`);
+export const discord = async (args: string[]): Promise<string> => {
+  window.open(`https://discord.gg/${config.social.discord}/`);
 
-  return 'Opening github...';
+  return 'Opening discord...';
 };
 
+export const twitter = async (args: string[]): Promise<string> => {
+  window.open(`https://twitter.com/${config.social.twitter}/`);
 
+  return 'Opening twitter...';
+};
