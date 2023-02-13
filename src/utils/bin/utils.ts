@@ -135,8 +135,6 @@ Start by typing 'adventure go "direction" ' to move to a different location.`;
   switch (args[0]) {
     case "go":
       return go(args[1]);
-    case "take":
-      return take(args[1]);
     case "drop":
       return drop(args[1]);
     }
