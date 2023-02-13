@@ -1,39 +1,6 @@
 import packageJson from '../../../package.json';
 import * as bin from './index';
-import imageToAdd from './../assets/images/woofv1.png';
-import * as readline from 'readline';
 
-export function startAdventure() {
-  console.log("Welcome to the Text Adventure Game!");
-  console.log("You find yourself in a dark forest, and you need to find a way out.");
-  console.log("You can go 'left', 'right', 'forward', or 'back'");
-
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
-  });
-
-  rl.question("Which way do you want to go? ", (answer) => {
-    switch (answer.toLowerCase()) {
-      case "left":
-        console.log("You came across a river. You need to find a way to cross it.");
-        break;
-      case "right":
-        console.log("You found a hidden path! You follow it and eventually reach a castle.");
-        break;
-      case "forward":
-        console.log("You walked into a clearing and found a mysterious object.");
-        break;
-      case "back":
-        console.log("You went back and found a village. You decide to ask for help.");
-        break;
-      default:
-        console.log("Invalid direction. Please try again.");
-        break;
-    }
-    rl.close();
-  });
-}
 
 export const help = async (args: string[]): Promise<string> => {
   const commands = Object.keys(bin).sort().join('\n ');
@@ -96,6 +63,81 @@ x       │  Dahae                         │       │                        
 Type 'help' to see list of available commands.
 
 `;
+interface Location {
+  name: string;
+  description: string;
+  items: string[];
+  exits: { [key: string]: string };
+}
 
+const locations: { [key: string]: Location } = {
+  homeworld: {
+    name: "Nomo's Homeworld",
+    description: "You are standing in the midst of a beautiful and serene landscape, surrounded by rolling hills and pristine lakes.",
+    items: ["A shiny rock"],
+    exits: { east: "dept33", south: "dahae" },
+  },
+  dept33: {
+    name: "Department 33",
+    description: "You find yourself in a vast underground facility, filled with high-tech equipment and staffed by busy technicians.",
+    items: ["A datapad"],
+    exits: { west: "homeworld" },
+  },
+  dahae: {
+    name: "Dahae",
+    description: "You find yourself in a bustling city, filled with people going about their business. Towering skyscrapers loom overhead.",
+    items: ["A street map"],
+    exits: { north: "homeworld" },
+  },
+};
+
+let currentLocation = locations.homeworld;
+let inventory: string[] = [];
+
+const displayLocation = (): string => {
+  let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
+  if (currentLocation.items.length > 0) {
+    output += `\nYou see the following items here: ${currentLocation.items.join(", ")}`;
+  }
+  output += "\nExits:";
+  for (const direction in currentLocation.exits) {
+    output += `\n  ${direction}: ${currentLocation.exits[direction]}`;
+  }
+  return output;
+};
+
+const go = (direction: string): string => {
+  if (!currentLocation.exits[direction]) {
+    return "You can't go that way.";
+  }
+  currentLocation = locations[currentLocation.exits[direction]];
+  return displayLocation();
+};
+
+const take = (item: string): string => {
+  const index = currentLocation.items.indexOf(item);
+  if (index === -1) {
+    return "That item isn't here.";
+  }
+  inventory.push(currentLocation.items.splice(index, 1)[0]);
+  return `You took ${item}.`;
+};
+
+const drop = (item: string): string => {
+  const index = inventory.indexOf(item);
+  if (index === -1) {
+    return "You don't have that item.";
+  }
+  currentLocation.items.push(inventory.splice(index, 1)[0]);
+  return `You dropped ${item}.`;
+};
+
+export const adventure = async (args?: string[]): Promise<string> => {
+  switch (args[0]) {
+    case "go":
+      return go(args[1]);
+    case "take":
+      return take(args[1]);
+    case "drop":
 
 };
