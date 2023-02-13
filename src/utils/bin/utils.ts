@@ -75,11 +75,13 @@ const locations: { [key: string]: Location } = {
 
 let currentLocation = locations.homeworld;
 let inventory: string[] = [];
+const takenItems = new Set<string>();
 
 const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
-  if (currentLocation.items.length > 0) {
-    output += `\nYou see the following items here: ${currentLocation.items.join(", ")}`;
+  const items = currentLocation.items.filter(item => !takenItems.has(item));
+  if (items.length > 0) {
+    output += `\nYou see the following items here: ${items.join(", ")}`;
   }
   output += "\nExits:";
   for (const direction in currentLocation.exits) {
@@ -101,6 +103,7 @@ export const take = (item: string): string => {
   if (index === -1) {
     return "That item isn't here.";
   }
+  takenItems.add(item);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
   return `You took ${item}.`;
@@ -111,28 +114,8 @@ export const drop = (item: string): string => {
   if (index === -1) {
     return "You don't have that item.";
   }
+  takenItems.delete(item);
   currentLocation.items.push(inventory[index]);
   inventory.splice(index, 1);
   return `You dropped ${item}.`;
-};
-
-export const adventure = async (args?: string[]): Promise<string> => {
-  if (!args || args.length === 0) {
-    return `Welcome to the adventure game!
-
-Available commands:
-- go "direction" (ex: adventure go east)
-- take "item" (ex: adventure take datapad)
-- drop "item" (ex: adventure drop rock)
-
-Start by typing 'adventure go "direction" ' to move to a different location.`;
-  }
-  switch (args[0]) {
-    case "go":
-      return go(args[1]);
-    case "take":
-      return take(args[1]);
-    case "drop":
-      return drop(args[1]);
-    }
 };
