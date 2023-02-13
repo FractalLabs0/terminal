@@ -139,5 +139,5 @@ export const adventure = async (args?: string[]): Promise<string> => {
     case "take":
       return take(args[1]);
     case "drop":
-
+    }
 };
