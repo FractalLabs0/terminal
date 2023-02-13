@@ -101,7 +101,7 @@ export const go = (direction: string): string => {
 export const take = (item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
-    return "That item isn't here.Current location: ${currentLocation.name}";
+    return "That item isn't here.Current location:" + currentLocation.name;
   }
   takenItems.add(item);
   inventory.push(currentLocation.items[index]);
