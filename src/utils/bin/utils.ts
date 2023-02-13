@@ -121,6 +121,19 @@ export const drop = (args: string[]): Promise<string> => {
   return Promise.resolve(`You dropped ${item}.`);
 };
 
+export const combine = (args: string[]): Promise<string> => {
+  const item1 = args[0];
+  const item2 = args[2];
+  if (inventory.indexOf(item1) === -1 || inventory.indexOf(item2) === -1) {
+    return
+    Promise.resolve(`You don't have both items in your inventory.`);
+  }
+  const newItem = `${item1} + ${item2}`;
+  inventory = inventory.filter(item => item !== item1 && item !== item2);
+  inventory.push(newItem);
+  return Promise.resolve(`You combined ${item1} and ${item2} to create ${newItem}.`);
+};
+
 export const adventure = async (args?: string[]): Promise<string> => {
   if (!args || args.length === 0) {
     return `Welcome to the adventure game!
@@ -129,11 +142,20 @@ Available commands:
 - go "direction" (ex: adventure go east)
 - take "item" (ex: adventure take datapad)
 - drop "item" (ex: adventure drop rock)
+- combine "item1" with "item2" (ex: adventure combine rock with datapad)
 
 Start by typing 'adventure go "direction" ' to move to a different location.`;
   }
   switch (args[0]) {
     case "go":
       return go(args[1]);
-    }
+    case "take":
+      return await take(args.slice(1));
+    case "drop":
+      return await drop(args.slice(1));
+    case "combine":
+      return await combine(args.slice(1));
+    default:
+      return "Invalid command. Please try again.";
+  }
 };
