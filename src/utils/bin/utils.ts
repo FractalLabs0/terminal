@@ -82,7 +82,7 @@ const locations: { [key: string]: Location } = {
 let currentLocation = locations.homeworld;
 let inventory: string[] = [];
 
-const displayLocation = async (): Promise<string> => {
+const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
   if (currentLocation.items.length > 0) {
     output += `\nYou see the following items here: ${currentLocation.items.join(", ")}`;
@@ -94,15 +94,15 @@ const displayLocation = async (): Promise<string> => {
   return output;
 };
 
-export const go = async (direction: string): Promise<string> => {
+export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
   currentLocation = locations[currentLocation.exits[direction]];
-  return await displayLocation();
+  return displayLocation();
 };
 
-export const take = async (item: string): Promise<string> => {
+export const take = (item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
     return "That item isn't here.";
@@ -111,7 +111,7 @@ export const take = async (item: string): Promise<string> => {
   return `You took ${item}.`;
 };
 
-export const drop = async (item: string): Promise<string> => {
+export const drop = (item: string): string => {
   const index = inventory.indexOf(item);
   if (index === -1) {
     return "You don't have that item.";
@@ -120,7 +120,7 @@ export const drop = async (item: string): Promise<string> => {
   return `You dropped ${item}.`;
 };
 
-export const showInventory = async (): Promise<string> => {
+export const showInventory = (): string => {
   if (inventory.length === 0) {
     return "Your inventory is empty.";
   }
@@ -141,12 +141,12 @@ Start by typing 'adventure go <direction>' to move to a different location.`;
   }
   switch (args[0]) {
     case "go":
-      return await go(args[1]);
+      return go(args[1]);
     case "take":
-      return await take(args[1]);
+      return take(args[1]);
     case "drop":
-      return await drop(args[1]);
+      return drop(args[1]);
     case "inventory":
-      return await showInventory();
+      return showInventory();
   }
 };
