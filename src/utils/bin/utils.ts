@@ -119,3 +119,24 @@ export const drop = (item: string): string => {
   inventory.splice(index, 1);
   return `You dropped ${item}.`;
 };
+
+export const adventure = async (args?: string[]): Promise<string> => {
+  if (!args || args.length === 0) {
+    return `Welcome to the adventure game!
+
+Available commands:
+- go "direction" (ex: adventure go east)
+- take "item" (ex: adventure take datapad)
+- drop "item" (ex: adventure drop rock)
+
+Start by typing 'adventure go "direction" ' to move to a different location.`;
+  }
+  switch (args[0]) {
+    case "go":
+      return go(args[1]);
+    case "take":
+      return take(args[1]);
+    case "drop":
+      return drop(args[1]);
+    }
+};
