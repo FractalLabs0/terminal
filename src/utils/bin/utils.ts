@@ -120,6 +120,13 @@ const drop = (item: string): string => {
   return `You dropped ${item}.`;
 };
 
+const showInventory = (): string => {
+  if (inventory.length === 0) {
+    return "Your inventory is empty.";
+  }
+  return `You have the following items in your inventory: ${inventory.join(", ")}`;
+};
+
 export const adventure = async (args?: string[]): Promise<string> => {
   if (!args || args.length === 0) {
     return `Welcome to the adventure game!
@@ -128,6 +135,7 @@ Available commands:
 - go <direction> (ex: go east)
 - take <item> (ex: take datapad)
 - drop <item> (ex: drop rock)
+- inventory
 
 Start by typing 'adventure go <direction>' to move to a different location.`;
   }
@@ -138,5 +146,7 @@ Start by typing 'adventure go <direction>' to move to a different location.`;
       return take(args[1]);
     case "drop":
       return drop(args[1]);
-    }
+    case "inventory":
+      return showInventory();
+  }
 };
