@@ -98,16 +98,17 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-export const take = async (args: string[]): Promise<string> => {
+export const take = (args: string[]): Promise<string> => {
   const index = currentLocation.items.indexOf(args[0]);
   if (index === -1) {
-    return "That item isn't here.Current location:" + currentLocation.name;
+    return Promise.resolve("That item isn't here. Current location: " + currentLocation.name);
   }
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
-  return `You took ${args[0]}.`;
+  return Promise.resolve(`You took ${args[0]}.`);
 };
+
 
 export const drop = (item: string): string => {
   const index = inventory.indexOf(item);
@@ -134,8 +135,6 @@ Start by typing 'adventure go "direction" ' to move to a different location.`;
   switch (args[0]) {
     case "go":
       return go(args[1]);
-    case "take":
-      return take(args[1]);
     case "drop":
       return drop(args[1]);
     }
