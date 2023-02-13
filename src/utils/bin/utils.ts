@@ -3,6 +3,37 @@ import * as bin from './index';
 import imageToAdd from './../assets/images/woofv1.png';
 import * as readline from 'readline';
 
+export function startAdventure() {
+  console.log("Welcome to the Text Adventure Game!");
+  console.log("You find yourself in a dark forest, and you need to find a way out.");
+  console.log("You can go 'left', 'right', 'forward', or 'back'");
+
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+
+  rl.question("Which way do you want to go? ", (answer) => {
+    switch (answer.toLowerCase()) {
+      case "left":
+        console.log("You came across a river. You need to find a way to cross it.");
+        break;
+      case "right":
+        console.log("You found a hidden path! You follow it and eventually reach a castle.");
+        break;
+      case "forward":
+        console.log("You walked into a clearing and found a mysterious object.");
+        break;
+      case "back":
+        console.log("You went back and found a village. You decide to ask for help.");
+        break;
+      default:
+        console.log("Invalid direction. Please try again.");
+        break;
+    }
+    rl.close();
+  });
+}
 
 export const help = async (args: string[]): Promise<string> => {
   const commands = Object.keys(bin).sort().join('\n ');
