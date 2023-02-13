@@ -61,21 +61,15 @@ interface Location {
 const locations: { [key: string]: Location } = {
   homeworld: {
     name: "Nomo's Homeworld",
-    description: "You are standing in the midst of a beautiful and serene landscape, surrounded by rolling hills and pristine lakes.",
+    description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
     exits: { east: "dept33", south: "dahae" },
   },
   dept33: {
     name: "Department 33",
-    description: "You find yourself in a vast underground facility, filled with high-tech equipment and staffed by busy technicians.",
+    description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
     exits: { west: "homeworld" },
-  },
-  dahae: {
-    name: "Dahae",
-    description: "You find yourself in a bustling city, filled with people going about their business. Towering skyscrapers loom overhead.",
-    items: ["map"],
-    exits: { north: "homeworld" },
   },
 };
 
@@ -125,11 +119,11 @@ export const adventure = async (args?: string[]): Promise<string> => {
     return `Welcome to the adventure game!
 
 Available commands:
-- go <direction> (ex: go east)
-- take <item> (ex: take datapad)
-- drop <item> (ex: drop rock)
+- go "direction" (ex: adventure go east)
+- take "item" (ex: adventure take datapad)
+- drop "item" (ex: adventure drop rock)
 
-Start by typing 'adventure go <direction>' to move to a different location.`;
+Start by typing 'adventure go "direction" ' to move to a different location.`;
   }
   switch (args[0]) {
     case "go":
