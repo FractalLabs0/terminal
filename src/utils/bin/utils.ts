@@ -62,7 +62,7 @@ x       │  Dahae                         │       │                        
                 Rift          x                        x
 Type 'help' to see list of available commands.
 
-`;
+`};
 interface Location {
   name: string;
   description: string;
