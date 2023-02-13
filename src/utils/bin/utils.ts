@@ -98,15 +98,15 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-export const take = (item: string): string => {
-  const index = currentLocation.items.indexOf(item);
+export const take = async (args: string[]): Promise<string> => {
+  const index = currentLocation.items.indexOf(args[0]);
   if (index === -1) {
     return "That item isn't here.Current location:" + currentLocation.name;
   }
-  takenItems.add(item);
+  takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
-  return `You took ${item}.`;
+  return `You took ${args[0]}.`;
 };
 
 export const drop = (item: string): string => {
