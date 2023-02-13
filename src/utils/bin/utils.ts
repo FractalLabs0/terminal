@@ -98,17 +98,16 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-export const take = (currentLocation: Location, item: string): string => {
+export const take = (item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
-    return "That item isn't here.";
+    return "That item isn't here.Current location: ${currentLocation.name}";
   }
   takenItems.add(item);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
   return `You took ${item}.`;
 };
-
 
 export const drop = (item: string): string => {
   const index = inventory.indexOf(item);
@@ -135,6 +134,8 @@ Start by typing 'adventure go "direction" ' to move to a different location.`;
   switch (args[0]) {
     case "go":
       return go(args[1]);
+    case "take":
+      return take(args[1]);
     case "drop":
       return drop(args[1]);
     }
