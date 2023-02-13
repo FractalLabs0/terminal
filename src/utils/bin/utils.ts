@@ -71,6 +71,12 @@ const locations: { [key: string]: Location } = {
     items: ["datapad"],
     exits: { west: "homeworld" },
   },
+  dahae: {
+    name: "Dahae",
+    description: "You have unplugged and entered a new world!",
+    items: [],
+    exits: { north: "homeworld" },
+  },
 };
 
 let currentLocation = locations.homeworld;
@@ -121,17 +127,19 @@ export const drop = (args: string[]): Promise<string> => {
   return Promise.resolve(`You dropped ${item}.`);
 };
 
-export const combine = (args: string[]): Promise<string> => {
-  const item1 = args[0];
-  const item2 = args[2];
-  if (inventory.indexOf(item1) === -1 || inventory.indexOf(item2) === -1) {
-    return
-    Promise.resolve(`You don't have both items in your inventory.`);
+export const use = (args: string[]):Promise<string> => {
+  if (args[0] === "datapad") {
+    return Promise.resolve("You have used the datapad and discovered a new function called unplug.");
   }
-  const newItem = `${item1} + ${item2}`;
-  inventory = inventory.filter(item => item !== item1 && item !== item2);
-  inventory.push(newItem);
-  return Promise.resolve(`You combined ${item1} and ${item2} to create ${newItem}.`);
+  return Promise.resolve("You can't use that item.");
+};
+
+export const unplug = (): Promise<string> => {
+  if (inventory.includes("datapad")) {
+    currentLocation = locations.dahae;
+    return Promise.resolve(displayLocation());
+  }
+  return Promise.resolve("You need the datapad to unplug.");
 };
 
 export const adventure = async (args?: string[]): Promise<string> => {
@@ -142,7 +150,8 @@ Available commands:
 - go "direction" (ex: adventure go east)
 - take "item" (ex: adventure take datapad)
 - drop "item" (ex: adventure drop rock)
-- combine "item1" with "item2" (ex: adventure combine rock with datapad)
+- use "item" (ex: adventure use datapad)
+- unplug (ex: adventure unplug)
 
 Start by typing 'adventure go "direction" ' to move to a different location.`;
   }
@@ -153,8 +162,10 @@ Start by typing 'adventure go "direction" ' to move to a different location.`;
       return await take(args.slice(1));
     case "drop":
       return await drop(args.slice(1));
-    case "combine":
-      return await combine(args.slice(1));
+    case "use":
+      return await use(args.slice(1));
+    case "unplug":
+      return await unplug();
     default:
       return "Invalid command. Please try again.";
   }
