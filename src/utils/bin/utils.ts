@@ -94,7 +94,7 @@ const displayLocation = (): string => {
   return output;
 };
 
-const go = (direction: string): string => {
+export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
@@ -102,7 +102,7 @@ const go = (direction: string): string => {
   return displayLocation();
 };
 
-const take = (item: string): string => {
+export const take = (item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
     return "That item isn't here.";
@@ -111,7 +111,7 @@ const take = (item: string): string => {
   return `You took ${item}.`;
 };
 
-const drop = (item: string): string => {
+export const drop = (item: string): string => {
   const index = inventory.indexOf(item);
   if (index === -1) {
     return "You don't have that item.";
@@ -120,7 +120,7 @@ const drop = (item: string): string => {
   return `You dropped ${item}.`;
 };
 
-const showInventory = (): string => {
+export const showInventory = (): string => {
   if (inventory.length === 0) {
     return "Your inventory is empty.";
   }
