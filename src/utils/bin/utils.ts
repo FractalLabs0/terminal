@@ -98,7 +98,7 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-export const take = (item: string): string => {
+export const take = (currentLocation: Location, item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
     return "That item isn't here.";
@@ -108,6 +108,7 @@ export const take = (item: string): string => {
   currentLocation.items.splice(index, 1);
   return `You took ${item}.`;
 };
+
 
 export const drop = (item: string): string => {
   const index = inventory.indexOf(item);
