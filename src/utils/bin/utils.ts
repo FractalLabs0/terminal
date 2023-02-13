@@ -62,19 +62,19 @@ const locations: { [key: string]: Location } = {
   homeworld: {
     name: "Nomo's Homeworld",
     description: "You are standing in the midst of a beautiful and serene landscape, surrounded by rolling hills and pristine lakes.",
-    items: ["A shiny rock"],
+    items: ["rock"],
     exits: { east: "dept33", south: "dahae" },
   },
   dept33: {
     name: "Department 33",
     description: "You find yourself in a vast underground facility, filled with high-tech equipment and staffed by busy technicians.",
-    items: ["A datapad"],
+    items: ["datapad"],
     exits: { west: "homeworld" },
   },
   dahae: {
     name: "Dahae",
     description: "You find yourself in a bustling city, filled with people going about their business. Towering skyscrapers loom overhead.",
-    items: ["A street map"],
+    items: ["map"],
     exits: { north: "homeworld" },
   },
 };
