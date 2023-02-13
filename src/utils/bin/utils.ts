@@ -8,25 +8,13 @@ export const help = async (args: string[]): Promise<string> => {
   return `Available commands:\n${commands}\n\n[tab]\t trigger completion.\n[ctrl+l] clear terminal.\n[ctrl+c] cancel command.`;
 };
 
-export const sudo = async (args?: string[]): Promise<string> => {
-   return 'The Fractal Labs simulation size is limited by the organisation ressources. The simulation grows as Fractal Labs augments its capacities';
-};
-
 export const whoami = async (args: string[]): Promise<string> => {
   return `You are logged in to the Fractal Labs console via remote access. Your clearance level is: Operator: Department. Please access a Fractal Labs console to verify identity.
 This action cannot be performed remotely.`;
 };
 
 
-export const email = async (args: string[]): Promise<string> => {
-  window.open('mailto:portal@fractallabs.org');
-
-  return 'Opening mailto:portal@fractallabs.org...';
-};
-
-
-
-export const banner = (args?: string[]): string => {
+export const map = (args?: string[]): string => {
   return `
 
 '
