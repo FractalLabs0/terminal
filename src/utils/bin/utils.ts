@@ -94,7 +94,7 @@ const displayLocation = (): string => {
   return output;
 };
 
-export const go = (direction: string): string => {
+const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
@@ -102,7 +102,7 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-export const take = (item: string): string => {
+const take = (item: string): string => {
   const index = currentLocation.items.indexOf(item);
   if (index === -1) {
     return "That item isn't here.";
@@ -111,20 +111,13 @@ export const take = (item: string): string => {
   return `You took ${item}.`;
 };
 
-export const drop = (item: string): string => {
+const drop = (item: string): string => {
   const index = inventory.indexOf(item);
   if (index === -1) {
     return "You don't have that item.";
   }
   currentLocation.items.push(inventory.splice(index, 1)[0]);
   return `You dropped ${item}.`;
-};
-
-export const showInventory = (): string => {
-  if (inventory.length === 0) {
-    return "Your inventory is empty.";
-  }
-  return `You have the following items in your inventory: ${inventory.join(", ")}`;
 };
 
 export const adventure = async (args?: string[]): Promise<string> => {
@@ -135,7 +128,6 @@ Available commands:
 - go <direction> (ex: go east)
 - take <item> (ex: take datapad)
 - drop <item> (ex: drop rock)
-- inventory
 
 Start by typing 'adventure go <direction>' to move to a different location.`;
   }
@@ -146,7 +138,5 @@ Start by typing 'adventure go <direction>' to move to a different location.`;
       return take(args[1]);
     case "drop":
       return drop(args[1]);
-    case "inventory":
-      return showInventory();
-  }
+    }
 };
