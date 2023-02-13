@@ -109,16 +109,16 @@ export const take = (args: string[]): Promise<string> => {
   return Promise.resolve(`You took ${args[0]}.`);
 };
 
-
-export const drop = (item: string): string => {
+export const drop = (args: string[]): Promise<string> => {
+  const item = args[0];
   const index = inventory.indexOf(item);
   if (index === -1) {
-    return "You don't have that item.";
+    return Promise.resolve("You don't have that item.");
   }
   takenItems.delete(item);
   currentLocation.items.push(inventory[index]);
   inventory.splice(index, 1);
-  return `You dropped ${item}.`;
+  return Promise.resolve(`You dropped ${item}.`);
 };
 
 export const adventure = async (args?: string[]): Promise<string> => {
@@ -135,7 +135,5 @@ Start by typing 'adventure go "direction" ' to move to a different location.`;
   switch (args[0]) {
     case "go":
       return go(args[1]);
-    case "drop":
-      return drop(args[1]);
     }
 };
