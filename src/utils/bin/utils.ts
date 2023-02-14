@@ -10,6 +10,7 @@ export const help = async (args: string[]): Promise<string> => {
     "map",
     "take",
     "use",
+    "talk",
     "whoami"
   ].sort().join('\n ');
 
@@ -143,7 +144,7 @@ const displayLocation = (): string => {
       i++;
     }
   }
-  output += "Exits:";
+  output += "\nExits:";
   for (const direction in currentLocation.exits) {
     output += `\n  ${direction}: ${currentLocation.exits[direction]}`;
   }
