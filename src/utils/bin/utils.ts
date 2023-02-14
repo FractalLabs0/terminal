@@ -63,7 +63,7 @@ const locations: { [key: string]: Location } = {
     name: "Nomo's Homeworld",
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
-    exits: { east: "dept33", south: "dahae" },
+    exits: { east: "dept33" },
   },
   dept33: {
     name: "Department 33",
@@ -134,7 +134,7 @@ export const use = (args: string[]):Promise<string> => {
   return Promise.resolve("You can't use that item.");
 };
 
-export const unplug = (): Promise<string> => {
+const unplug = (): Promise<string> => {
   if (inventory.includes("datapad")) {
     currentLocation = locations.dahae;
     return Promise.resolve(displayLocation());
@@ -147,10 +147,10 @@ export const adventure = async (args?: string[]): Promise<string> => {
     return `Welcome to the adventure game!
 
 Available commands:
-- go "direction" (ex: adventure go east)
-- take "item" (ex: adventure take datapad)
-- drop "item" (ex: adventure drop rock)
-- use "item" (ex: adventure use datapad)
+- go "direction" (ex: go east)
+- take "item" (ex: take datapad)
+- drop "item" (ex: drop rock)
+- use "item" (ex: use rock)
 - unplug (ex: adventure unplug)
 
 Start by typing 'adventure go "direction" ' to move to a different location.`;
