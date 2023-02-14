@@ -64,6 +64,13 @@ interface Location {
   description: string;
   items: string[];
   exits: { [key: string]: string };
+  npc?:string
+}
+
+interface NPC {
+  name: string;
+  message: string;
+  dialogOptions: { [key: string]: { message: string; requiresItem?: string } };
 }
 
 const locations: { [key: string]: Location } = {
@@ -72,6 +79,7 @@ const locations: { [key: string]: Location } = {
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
     exits: { east: "dept33" },
+    npc: "Jenny",
   },
   dept33: {
     name: "Department 33",
@@ -87,23 +95,81 @@ const locations: { [key: string]: Location } = {
   },
 };
 
+const npcs: { [key: string]: NPC } = {
+  jenny: {
+    name: "Jenny",
+    message: "Hi, I'm Jenny. Nice to meet you!",
+    dialogOptions: {
+      "1": {
+        message: "Here, have this shiny key in exchange for that rock you're holding.",
+        requiresItem: "rock",
+      },
+      "2": { message: "Nice meeting you too!" },
+    },
+  },
+};
+
 let currentLocation = locations.homeworld;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
 
 const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
-  const items = currentLocation.items.filter(item => !takenItems.has(item));
+  const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
     output += `\nYou see the following items here: ${items.join(", ")}`;
   }
-  output += "\nExits:";
+  if (currentLocation.npc) {
+    const npc = npcs[currentLocation.npc.toLowerCase()];
+    output += `\n${npc.name} says: ${npc.message}\n`;
+    let i = 1;
+    for (const option in npc.dialogOptions) {
+      const dialogOption = npc.dialogOptions[option];
+      const itemRequirement = dialogOption.requiresItem
+        ? ` (requires ${dialogOption.requiresItem})`
+        : "";
+      output += `  ${i}: ${dialogOption.message}${itemRequirement}\n`;
+      i++;
+    }
+  }
+  output += "Exits:";
   for (const direction in currentLocation.exits) {
     output += `\n  ${direction}: ${currentLocation.exits[direction]}`;
   }
   return output;
 };
-
+export const dialog = (option: string): Promise<string> => {
+  const npc = npcs[currentLocation.npc.toLowerCase()];
+  if (!npc) {
+    return Promise.resolve("There is no one to talk to here.");
+  }
+  const dialogOption = npc.dialogOptions[option];
+  if (!dialogOption) {
+    return Promise.resolve("Invalid dialog option. Please try again.");
+  }
+  if (
+    dialogOption.requiresItem &&
+    !inventory.includes(dialogOption.requiresItem)
+  ) {
+    return Promise.resolve(
+      `You don't have the necessary item to select that option.`
+    );
+  }
+  if (currentLocation.npc.toLowerCase() === "jenny" && dialogOption.requiresItem === "rock") {
+    const index = inventory.indexOf("rock");
+    if (index === -1) {
+      return Promise.resolve(
+        `You don't have the necessary item to select that option.`
+      );
+    }
+    inventory.splice(index, 1);
+    inventory.push("key");
+    return Promise.resolve(
+      `You gave Jenny the rock and received a key in exchange!`
+    );
+  }
+  return Promise.resolve(dialogOption.message);
+};
 export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
@@ -120,6 +186,12 @@ export const take = (args: string[]): Promise<string> => {
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
+  if (currentLocation.npc.toLowerCase() === "jenny" && inventory.includes("rock")) {
+    return Promise.resolve("You took the rock, but Jenny doesn't seem interested in it.");
+  }
+  if (currentLocation.npc.toLowerCase() === "jenny" && !inventory.includes("rock")) {
+    return Promise.resolve("You took the item, but Jenny seems to be eyeing your rock...");
+  }
   return Promise.resolve(`You took ${args[0]}.`);
 };
 
