@@ -67,11 +67,18 @@ interface Location {
   npc?:string
 }
 
+interface DialogOption {
+  message: string;
+  requiresItem?: string;
+  responseMessage?: string;
+}
+
 interface NPC {
   name: string;
   message: string;
-  dialogOptions: { [key: string]: { message: string; requiresItem?: string } };
+  dialogOptions: { [key: string]: DialogOption };
 }
+
 
 const locations: { [key: string]: Location } = {
   homeworld: {
@@ -103,8 +110,12 @@ const npcs: { [key: string]: NPC } = {
       "1": {
         message: "Here, have this shiny key in exchange for that rock you're holding.",
         requiresItem: "rock",
+        responseMessage: "Jenny gives you a shiny key in exchange for the rock."
       },
-      "2": { message: "Nice meeting you too!" },
+      "2": { message: "Nice meeting you too!" ,
+           responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
+           },
+      
     },
   },
 };
@@ -164,13 +175,11 @@ export const dialog = (option: string): Promise<string> => {
     }
     inventory.splice(index, 1);
     inventory.push("key");
-    return Promise.resolve(
-      `You gave Jenny the rock and received a key in exchange!`
-    );
+    return Promise.resolve(dialogOption.responseMessage);
   }
   //Jenny dialog 2 answer
   if (currentLocation.npc.toLowerCase() === "jenny" && option === "2") {
-    return Promise.resolve(`Jenny says: "Why did the tomato turn red? Because it saw the salad dressing!"`);
+    return Promise.resolve(dialogOption.responseMessage);
   }
   return Promise.resolve(dialogOption.message);
 };
