@@ -64,20 +64,6 @@ interface Location {
   description: string;
   items: string[];
   exits: { [key: string]: string };
-  npc?: NPC;
-}
-
-interface NPC {
-  name: string;
-  description: string;
-  dialog: DialogOption[];
-}
-
-interface DialogOption {
-  text: string;
-  response: string;
-  requiredItem?: string;
-  reward?: string;
 }
 
 const locations: { [key: string]: Location } = {
@@ -86,26 +72,6 @@ const locations: { [key: string]: Location } = {
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
     exits: { east: "dept33" },
-    npc: {
-      name: "Elder",
-      description: "An old wise being is standing here.",
-      dialog: [
-        {
-          text: "Greet",
-          response: "Hello young one, what brings you here?",
-        },
-        {
-          text: "Ask for advice",
-          response: "To reach Department 33, head east. Be careful, it's a dangerous place.",
-        },
-        {
-          text: "Offer rock",
-          response: "Thank you for the gift. Take this datapad, it may come in handy.",
-          requiredItem: "rock",
-          reward: "datapad",
-        },
-      ],
-    },
   },
   dept33: {
     name: "Department 33",
@@ -131,76 +97,58 @@ const displayLocation = (): string => {
   if (items.length > 0) {
     output += `\nYou see the following items here: ${items.join(", ")}`;
   }
-  if (currentLocation.npc) {
-    output += `\nYou see ${currentLocation.npc.name} here. ${currentLocation.npc.description}`;
-  }
   output += "\nExits:";
   for (const direction in currentLocation.exits) {
     output += `\n  ${direction}: ${currentLocation.exits[direction]}`;
   }
-  return output};
+  return output;
+};
 
-  export const talk = (npc: NPC, optionIndex: number): string => {
-    const selectedOption = npc.dialog[optionIndex];
-    if (!selectedOption) {
-      return "Invalid option.";
-    }
-    if (selectedOption.requiredItem && !inventory.includes(selectedOption.requiredItem)) {
-      return "You don't have the required item.";
-    }
-    if (selectedOption.reward) {
-      inventory.push(selectedOption.reward);
-    }
-    return selectedOption.response;
-  };
-  
-  export const go = (direction: string): string => {
-    if (!currentLocation.exits[direction]) {
-      return "You can't go that way.";
-    }
-    currentLocation = locations[currentLocation.exits[direction]];
-    return displayLocation();
-  };
-  
-  export const take = (args: string[]): Promise<string> => {
-    const index = currentLocation.items.indexOf(args[0]);
-    if (index === -1) {
-      return Promise.resolve("That item isn't here. Current location: " + currentLocation.name);
-    }
-    takenItems.add(currentLocation.items[index]);
-    inventory.push(currentLocation.items[index]);
-    currentLocation.items.splice(index, 1);
-    return Promise.resolve(`You took ${args[0]}.`);
-  };
-  
-  export const drop = (args: string[]): Promise<string> => {
-    const item = args[0];
-    const index = inventory.indexOf(item);
-    if (index === -1) {
-      return Promise.resolve("You don't have that item.");
-    }
-    takenItems.delete(item);
-    currentLocation.items.push(inventory[index]);
-    inventory.splice(index, 1);
-    return Promise.resolve(`You dropped ${item}.`);
-  };
-  
-  export const use = (args: string[]):Promise<string> => {
-    if (args[0] === "datapad") {
-      return Promise.resolve("You have used the datapad and discovered a new function called unplug.");
-    }
-    return Promise.resolve("You can't use that item.");
-  };
-  
-  export const unplug = (): Promise<string> => {
-    if (inventory.includes("datapad")) {
-      currentLocation = locations.dahae;
-      return Promise.resolve(displayLocation());
-    }
-    return Promise.resolve("You need the datapad to unplug.");
-  };
-  
+export const go = (direction: string): string => {
+  if (!currentLocation.exits[direction]) {
+    return "You can't go that way.";
+  }
+  currentLocation = locations[currentLocation.exits[direction]];
+  return displayLocation();
+};
 
+export const take = (args: string[]): Promise<string> => {
+  const index = currentLocation.items.indexOf(args[0]);
+  if (index === -1) {
+    return Promise.resolve("That item isn't here. Current location: " + currentLocation.name);
+  }
+  takenItems.add(currentLocation.items[index]);
+  inventory.push(currentLocation.items[index]);
+  currentLocation.items.splice(index, 1);
+  return Promise.resolve(`You took ${args[0]}.`);
+};
+
+export const drop = (args: string[]): Promise<string> => {
+  const item = args[0];
+  const index = inventory.indexOf(item);
+  if (index === -1) {
+    return Promise.resolve("You don't have that item.");
+  }
+  takenItems.delete(item);
+  currentLocation.items.push(inventory[index]);
+  inventory.splice(index, 1);
+  return Promise.resolve(`You dropped ${item}.`);
+};
+
+export const use = (args: string[]):Promise<string> => {
+  if (args[0] === "datapad") {
+    return Promise.resolve("You have used the datapad and discovered a new function called unplug.");
+  }
+  return Promise.resolve("You can't use that item.");
+};
+
+export const unplug = (): Promise<string> => {
+  if (inventory.includes("datapad")) {
+    currentLocation = locations.dahae;
+    return Promise.resolve(displayLocation());
+  }
+  return Promise.resolve("You need the datapad to unplug.");
+};
 
 export const adventure = async (args?: string[]): Promise<string> => {
   if (!args || args.length === 0) {
