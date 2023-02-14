@@ -181,7 +181,6 @@ export const dialog = (option: string): Promise<string> => {
   if (currentLocation.npc.toLowerCase() === "jenny" && option === "2") {
     return Promise.resolve(dialogOption.responseMessage);
   }
-  return Promise.resolve(dialogOption.message);
 };
 export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
