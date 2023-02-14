@@ -209,12 +209,19 @@ export const drop = (args: string[]): Promise<string> => {
   return Promise.resolve(`You dropped ${item}.`);
 };
 
-export const use = (args: string[]):Promise<string> => {
-  if (args[0] === "datapad") {
+export const use = (args: string[]): Promise<string> => {
+  const item = args[0];
+  if (item === "phone")  {
+    currentNPC = npcs.phoneNPC;
+    currentDialog = npcs.phoneNPC.dialog;
+    return displayDialog();
+  } else if (item === "datapad") {
     return Promise.resolve("You have used the datapad and discovered a new function called unplug.");
   }
   return Promise.resolve("You can't use that item.");
 };
+
+
 
 export const unplug = (): Promise<string> => {
   if (inventory.includes("datapad")) {
@@ -222,15 +229,6 @@ export const unplug = (): Promise<string> => {
     return Promise.resolve(displayLocation());
   }
   return Promise.resolve("You need the datapad to unplug.");
-};
-
-export const interact = (args: string[]): string => {
-  if (args[0] === "phone") {
-    currentNPC = npcs.phoneNPC;
-    currentDialog = npcs.phoneNPC.dialog;
-    return displayDialog();
-  }
-  return "You can't interact with that.";
 };
 
 export const select = (choice: number): string => {
