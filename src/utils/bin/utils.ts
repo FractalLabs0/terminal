@@ -149,8 +149,8 @@ const displayLocation = (): string => {
   }
   return output;
 };
-export const dialog = (option: string): Promise<string> => {
-  const npc = npcs[currentLocation.npc.toLowerCase()];
+export const talk = (option: string): Promise<string> => {
+  const npc = npcs[currentLocation.npc?.toLowerCase()];
   if (!npc) {
     return Promise.resolve("There is no one to talk to here.");
   }
@@ -158,30 +158,32 @@ export const dialog = (option: string): Promise<string> => {
   if (!dialogOption) {
     return Promise.resolve("Invalid dialog option. Please try again.");
   }
-  if (
-    dialogOption.requiresItem &&
-    !inventory.includes(dialogOption.requiresItem)
-  ) {
-    return Promise.resolve(
-      `You don't have the necessary item to select that option.`
-    );
+  if (dialogOption.requiresItem && !inventory.includes(dialogOption.requiresItem)) {
+    return Promise.resolve(`You don't have the necessary item to select that option.`);
   }
-  if (currentLocation.npc.toLowerCase() === "jenny" && dialogOption.requiresItem === "rock") {
+
+  if (dialogOption.requiresItem) {
+    const result = handleItemExchange(dialogOption.requiresItem, dialogOption.responseMessage);
+    if (result) {
+      return Promise.resolve(result);
+    }
+  }
+  return Promise.resolve(dialogOption.responseMessage);
+};
+
+const handleItemExchange = (item: string, responseMessage: string): string | undefined => {
+  if (item === "rock") {
     const index = inventory.indexOf("rock");
     if (index === -1) {
-      return Promise.resolve(
-        `You don't have the necessary item to select that option.`
-      );
+      return `You don't have the necessary item to select that option.`;
     }
     inventory.splice(index, 1);
     inventory.push("key");
-    return Promise.resolve(dialogOption.responseMessage);
+    return responseMessage;
   }
-  //Jenny dialog 2 answer
-  if (currentLocation.npc.toLowerCase() === "jenny" && option === "2") {
-    return Promise.resolve(dialogOption.responseMessage);
-  }
+  return undefined;
 };
+
 export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
