@@ -168,6 +168,10 @@ export const dialog = (option: string): Promise<string> => {
       `You gave Jenny the rock and received a key in exchange!`
     );
   }
+  //Jenny dialog 2 answer
+  if (currentLocation.npc.toLowerCase() === "jenny" && option === "2") {
+    return Promise.resolve(`Jenny says: "Why did the tomato turn red? Because it saw the salad dressing!"`);
+  }
   return Promise.resolve(dialogOption.message);
 };
 export const go = (direction: string): string => {
