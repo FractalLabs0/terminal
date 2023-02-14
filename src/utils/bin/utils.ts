@@ -22,7 +22,7 @@ This action cannot be performed remotely.`;
 };
 
 
-export const map = (args?: string[]): string => {
+export const banner = (args?: string[]): string => {
   return `
 
 '
