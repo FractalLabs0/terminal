@@ -3,7 +3,15 @@ import * as bin from './index';
 
 
 export const help = async (args: string[]): Promise<string> => {
-  const commands = Object.keys(bin).sort().join('\n ');
+  const commands = [
+    "adventure",
+    "drop",
+    "go",
+    "map",
+    "take",
+    "use",
+    "whoami"
+  ].sort().join('\n ');
 
   return `Available commands:\n${commands}\n\n[tab]\t trigger completion.\n[ctrl+l] clear terminal.\n[ctrl+c] cancel command.`;
 };
@@ -134,7 +142,7 @@ export const use = (args: string[]):Promise<string> => {
   return Promise.resolve("You can't use that item.");
 };
 
-const unplug = (): Promise<string> => {
+export const unplug = (): Promise<string> => {
   if (inventory.includes("datapad")) {
     currentLocation = locations.dahae;
     return Promise.resolve(displayLocation());
