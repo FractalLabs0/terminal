@@ -82,25 +82,25 @@ interface NPC {
 
 
 const locations: { [key: string]: Location } = {
-  Bedroom: {
-    name: "Hospital Bedroom",
-    description: "You are standing in the midst of a beautiful and serene landscape.",
-    items: ["rock","Green jello"],
+  bedroom: {
+    name: "Nomo's Homeworld",
+    description: "You are standing in your hospital bedroom. You hear ringing.",
+    items: ["Green Jello"],
     exits: { east: "lobby" },
     npc: "Jenny",
   },
   lobby: {
-    name: "lobby",
+    name: "Hospital lobby",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
-    exits: { west: "Bedroom" },
+    exits: { west: "bedroom" },
     npc: "Robo-Nurse",
   },
   dahae: {
     name: "Dahae",
     description: "You have unplugged and entered a new world!",
     items: [],
-    exits: { north: "Bedroom" },
+    exits: { north: "bedroom" },
   },
 };
 
@@ -120,9 +120,9 @@ const npcs: { [key: string]: NPC } = {
       
     },
   },
-  robo-nurse: {
+  robonurse: {
     name: "Robo-Nurse",
-    message: "Hi, I'm Robo-Nurse#102. Nice to meet you!",
+    message: "Hi, I'm robonurse. Nice to meet you!",
     dialogOptions: {
       "1": {
         message: "Here, have this shiny key in exchange for that rock you're holding.",
@@ -137,7 +137,7 @@ const npcs: { [key: string]: NPC } = {
   },
 };
 
-let currentLocation = locations.Bedroom;
+let currentLocation = locations.homeworld;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
 
