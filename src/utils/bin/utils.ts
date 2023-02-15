@@ -127,13 +127,12 @@ const npcs: { [key: string]: NPC } = {
     },
   },
   robonurse: {
-    name: "Robo-Nurse",
-    message: "Hi, I'm robonurse. Nice to meet you!",
+    name: "RoboNurse",
+    message: "Hi, I'm robonurse. GO. TO. YOUR. ROOM.",
     dialogOptions: {
       "1": {
-        message: "Here, have this shiny key in exchange for that rock you're holding.",
-        requiresItem: "rock",
-        responseMessage: "Jenny gives you a shiny key in exchange for the rock."
+        message: "Where am I?",
+        responseMessage: "You are in Newmont's mental facility. We take good care of dumdums like you :3"
       },
       "2": { message: "Nice meeting you too!" ,
            responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
