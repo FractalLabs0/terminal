@@ -90,7 +90,7 @@ const locations: { [key: string]: Location } = {
     npc: "Jenny",
   },
   lobby: {
-    name: "Hospital lobby",
+    name: "HospitalLobby",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad", "ID card"],
     exits: { west: "bedroom", south: "sidewalk"},
