@@ -94,6 +94,7 @@ const locations: { [key: string]: Location } = {
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
     exits: { west: "homeworld" },
+    npc: "RoboNurse"
   },
   dahae: {
     name: "Dahae",
@@ -106,6 +107,21 @@ const locations: { [key: string]: Location } = {
 const npcs: { [key: string]: NPC } = {
   jenny: {
     name: "Jenny",
+    message: "Hi, I'm Jenny. Nice to meet you!",
+    dialogOptions: {
+      "1": {
+        message: "Here, have this shiny key in exchange for that rock you're holding.",
+        requiresItem: "rock",
+        responseMessage: "Jenny gives you a shiny key in exchange for the rock."
+      },
+      "2": { message: "Nice meeting you too!" ,
+           responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
+           },
+      
+    },
+  },
+  robonurse: {
+    name: "RoboNurse",
     message: "Hi, I'm Jenny. Nice to meet you!",
     dialogOptions: {
       "1": {
