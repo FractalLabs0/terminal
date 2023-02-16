@@ -83,7 +83,7 @@ interface NPC {
 
 const locations: { [key: string]: Location } = {
   bedroom: {
-    name: "An hospital bedroom",
+    name: "Nomo's Homeworld",
     description: "You are standing in your hospital bedroom. You hear ringing.",
     items: ["Green Jello"],
     exits: { east: "lobby" },
@@ -92,8 +92,8 @@ const locations: { [key: string]: Location } = {
   lobby: {
     name: "Hospital lobby",
     description: "You find yourself in a vast underground facility.",
-    items: ["datapad", "ID card"],
-    exits: { west: "bedroom", south: "sidewalk"},
+    items: ["datapad"],
+    exits: { west: "bedroom" },
     npc: "Robo-Nurse",
   },
   dahae: {
@@ -101,12 +101,6 @@ const locations: { [key: string]: Location } = {
     description: "You have unplugged and entered a new world!",
     items: [],
     exits: { north: "bedroom" },
-  },
-  sidewalk: {
-    name: "Sidewalk",
-    description: "You have unplugged and entered a new world!",
-    items: [],
-    exits: { north: "lobby" },
   },
 };
 
@@ -211,11 +205,6 @@ export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
-
-  if (currentLocation.name === "Hospital lobby" && direction === "south" && !inventory.includes("ID card")) {
-    return "Robo-Nurse: You cannot go outside without an ID card, sillygoose";
-  }
-
   currentLocation = locations[currentLocation.exits[direction]];
   return displayLocation();
 };
