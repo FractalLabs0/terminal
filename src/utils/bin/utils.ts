@@ -82,25 +82,24 @@ interface NPC {
 
 
 const locations: { [key: string]: Location } = {
-  Bedroom: {
-    name: "Hospital Bedroom",
+  homeworld: {
+    name: "Nomo's Homeworld",
     description: "You are standing in the midst of a beautiful and serene landscape.",
-    items: ["rock","Green jello"],
-    exits: { east: "lobby" },
+    items: ["rock"],
+    exits: { east: "dept33" },
     npc: "Jenny",
   },
-  lobby: {
-    name: "lobby",
+  dept33: {
+    name: "Department 33",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
-    exits: { west: "Bedroom" },
-    npc: "Robo-Nurse",
+    exits: { west: "homeworld" },
   },
   dahae: {
     name: "Dahae",
     description: "You have unplugged and entered a new world!",
     items: [],
-    exits: { north: "Bedroom" },
+    exits: { north: "homeworld" },
   },
 };
 
@@ -120,24 +119,9 @@ const npcs: { [key: string]: NPC } = {
       
     },
   },
-  robo-nurse: {
-    name: "Robo-Nurse",
-    message: "Hi, I'm Robo-Nurse#102. Nice to meet you!",
-    dialogOptions: {
-      "1": {
-        message: "Here, have this shiny key in exchange for that rock you're holding.",
-        requiresItem: "rock",
-        responseMessage: "Jenny gives you a shiny key in exchange for the rock."
-      },
-      "2": { message: "Nice meeting you too!" ,
-           responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
-           },
-      
-    },
-  },
 };
 
-let currentLocation = locations.Bedroom;
+let currentLocation = locations.homeworld;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
 
