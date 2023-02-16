@@ -144,7 +144,8 @@ const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
   const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
-    output += `\nYou see the following items here: ${items.join(", ")}`;
+    const itemsString = items.join(", ");
+    output += `\nYou see the following items here: <span style="color: yellow">${itemsString}</span>`;
   }
   if (currentLocation.npc) {
     const npc = npcs[currentLocation.npc.toLowerCase()];
@@ -163,6 +164,7 @@ const displayLocation = (): string => {
   for (const direction in currentLocation.exits) {
     output += `\n  ${direction}: ${currentLocation.exits[direction]}`;
   }
+  console.log(`%c${output}`, "font-size: 14px");
   return output;
 };
 export const talk = (option: string): Promise<string> => {
