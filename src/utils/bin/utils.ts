@@ -201,12 +201,16 @@ const handleItemExchange = (item: string, responseMessage: string): string | und
 };
 
 export const go = (direction: string): string => {
+  if (currentLocation.name === "lobby" && direction === "south" && !inventory.includes("rock")) {
+    return "You can't get out of the hopital without the rock.";
+  }
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
   currentLocation = locations[currentLocation.exits[direction]];
   return displayLocation();
 };
+
 
 export const take = (args: string[]): Promise<string> => {
   const index = currentLocation.items.indexOf(args[0]);
