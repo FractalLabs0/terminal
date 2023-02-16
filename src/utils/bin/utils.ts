@@ -137,7 +137,7 @@ const npcs: { [key: string]: NPC } = {
   },
 };
 
-let currentLocation = locations.bedroom;
+let currentLocation = locations.homeworld;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
 
