@@ -82,8 +82,8 @@ interface NPC {
 
 
 const locations: { [key: string]: Location } = {
-  homeworld: {
-    name: "Nomo's Homeworld",
+  bedroom: {
+    name: "Hospital bedroom",
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
     exits: { east: "lobby" },
@@ -93,14 +93,14 @@ const locations: { [key: string]: Location } = {
     name: "Hospital Lobby",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
-    exits: { west: "homeworld", south: "dahae" },
+    exits: { west: "bedroom", south: "dahae" },
     npc: "RoboNurse"
   },
   dahae: {
     name: "Dahae",
     description: "You have unplugged and entered a new world!",
     items: [],
-    exits: { north: "homeworld" },
+    exits: { north: "bedroom" },
   },
 };
 
@@ -136,7 +136,7 @@ const npcs: { [key: string]: NPC } = {
   },
 };
 
-let currentLocation = locations.homeworld;
+let currentLocation = locations.bedroom;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
 
