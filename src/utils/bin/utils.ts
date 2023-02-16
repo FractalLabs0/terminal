@@ -94,7 +94,7 @@ const locations: { [key: string]: Location } = {
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
     exits: { west: "bedroom", south: "dahae" },
-    npc: "RoboNurse"
+    npc: "RoboNurse",
   },
   dahae: {
     name: "Dahae",
@@ -144,7 +144,7 @@ const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
   const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
-    output += `\nYou see the following items here: \x1b[33m${items.join(", ")}\x1b[0m`;
+    output += `\nYou see the following items here: ${items.join(", ")}`;
   }
   if (currentLocation.npc) {
     const npc = npcs[currentLocation.npc.toLowerCase()];
@@ -220,6 +220,7 @@ export const take = (args: string[]): Promise<string> => {
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
+  
   if (currentLocation.npc.toLowerCase() === "jenny" && inventory.includes("rock")) {
     return Promise.resolve("You took the rock, but Jenny doesn't seem interested in it.");
   }
@@ -248,6 +249,11 @@ export const use = (args: string[]):Promise<string> => {
   return Promise.resolve("You can't use that item.");
 };
 
+
+
+
+
+//MAYBE USEFUL FUNCTIONS, STANDALONE
 export const unplug = (): Promise<string> => {
   if (inventory.includes("datapad")) {
     currentLocation = locations.dahae;
