@@ -144,7 +144,7 @@ const displayLocation = (): string => {
   let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
   const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
-    output += `\nYou see the following items here: ${items.join(", ")}`;
+    output += `\nYou see the following items here: \x1b[33m${items.join(", ")}\x1b[0m`;
   }
   if (currentLocation.npc) {
     const npc = npcs[currentLocation.npc.toLowerCase()];
