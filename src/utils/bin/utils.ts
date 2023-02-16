@@ -86,14 +86,14 @@ const locations: { [key: string]: Location } = {
     name: "Nomo's Homeworld",
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
-    exits: { east: "dept33" },
+    exits: { east: "lobby" },
     npc: "Jenny",
   },
-  dept33: {
-    name: "Department 33",
+  lobby: {
+    name: "Hospital Lobby",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
-    exits: { west: "homeworld" },
+    exits: { west: "homeworld", south: "dahae" },
     npc: "RoboNurse"
   },
   dahae: {
@@ -122,15 +122,14 @@ const npcs: { [key: string]: NPC } = {
   },
   robonurse: {
     name: "RoboNurse",
-    message: "Hi, I'm Jenny. Nice to meet you!",
+    message: "GO. BACK. TO. YOUR. ROOM.",
     dialogOptions: {
       "1": {
-        message: "Here, have this shiny key in exchange for that rock you're holding.",
-        requiresItem: "rock",
-        responseMessage: "Jenny gives you a shiny key in exchange for the rock."
+        message: "Hello, where am I?",
+        responseMessage: "You are in Newmont's top mental facility. You're safe here as long as you GO. BACK. TO. YOUR. ROOM."
       },
-      "2": { message: "Nice meeting you too!" ,
-           responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
+      "2": { message: "Why can't I just walk out of here?" ,
+           responseMessage: "NO. ID. CARD. DETECTED."
            },
       
     },
