@@ -84,17 +84,17 @@ interface NPC {
 const locations: { [key: string]: Location } = {
   bedroom: {
     name: "An hospital bedroom",
-    description: "You hear ringing.",
+    description: "You are standing in your hospital bedroom. You hear ringing.",
     items: ["Green Jello"],
     exits: { east: "lobby" },
     npc: "Jenny",
   },
   lobby: {
-    name: "Hospital lobby",
+    name: "HospitalLobby",
     description: "You find yourself in a vast underground facility.",
-    items: ["datapad", "IDcard"],
+    items: ["datapad", "ID card"],
     exits: { west: "bedroom", south: "sidewalk"},
-    npc: "RoboNurse",
+    npc: "Robo-Nurse",
   },
   dahae: {
     name: "Dahae",
@@ -135,7 +135,7 @@ const npcs: { [key: string]: NPC } = {
         responseMessage: "You are in Newmont's mental facility. We take good care of dumdums like you :3"
       },
       "2": { message: "Nice meeting you too!" ,
-           responseMessage: "GO. TO. YOUR. ROOM."
+           responseMessage: "Jenny says: 'Why did the tomato turn red? Because it saw the salad dressing!'"
            },
       
     },
@@ -211,7 +211,7 @@ export const go = (direction: string): string => {
     return "You can't go that way.";
   }
 
-  if (currentLocation.name === "Hospital lobby" && direction === "south" && !inventory.includes("IDcard")) {
+  if (currentLocation.name === "Hospital lobby" && direction === "south" && !inventory.includes("ID card")) {
     return "Robo-Nurse: You cannot go outside without an ID card, sillygoose";
   }
 
