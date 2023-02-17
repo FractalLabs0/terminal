@@ -190,9 +190,6 @@ const npcs: { [key: string]: NPC } = {
       "3": { message: "I'm trying to leave." ,
            responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
            },           
-      "4": { message: "(hidden option) Show her your hospital ID card." ,
-           responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
-           },
     },
   },
 };
@@ -235,12 +232,14 @@ export const talk = (option: string): Promise<string> => {
   if (!dialogOption) {
     return Promise.resolve("Invalid dialog option. Please try again.");
   }
+
   if (dialogOption.requiresItem && !inventory.includes(dialogOption.requiresItem)) {
     if (currentLocation.npc?.toLowerCase() === "robonurse" && dialogOption.message === "(hidden option) Show her your hospital ID card." && !inventory.includes("rock")) {
       return Promise.resolve(`You need a rock to ask that question.`);
     }
     return Promise.resolve(dialogOption.responseMessage);
   }
+  
   if (dialogOption.requiresItem) {
     const result = handleItemExchange(dialogOption.requiresItem, dialogOption.responseMessage);
     if (result) {
@@ -270,6 +269,12 @@ export const go = (direction: string): string => {
   }
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
+  }
+  if (currentLocation.npc?.toLowerCase() === "robonurse" && inventory.includes("rock")) {
+    npcs.dialogOptions["4"] = {
+      message: "(hidden option) Show her your hospital ID card." ,
+      responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
+          };
   }
   currentLocation = locations[currentLocation.exits[direction]];
   return displayLocation();
