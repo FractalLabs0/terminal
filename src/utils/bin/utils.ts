@@ -325,7 +325,7 @@ export const fight = (args: string[]): Promise<string> => {
         const roboNurse = npcs.RoboNurse;
         return Promise.resolve(`The robot nurse calmly extends a metal prong from her left arm. You feel cool metal on your thigh then suddenly—BZZZZT!\nYou've been tased!\nIt feels like there are a million angry robot bees swarming inside of your bones.\nYou better not try that again.`);
       default:
-        return Promise.resolve(`There's no ${objectToExamine} here.`);
+        return Promise.resolve(`There's no ${objectTofight} here.`);
     }
   }
   return Promise.resolve(`There's no ${objectTofight} here to fight.`);
