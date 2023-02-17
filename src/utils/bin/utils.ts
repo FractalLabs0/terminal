@@ -114,6 +114,7 @@ const locations: { [key: string]: Location } = {
     name: "Dahae",
     description: "You have unplugged and entered a new world!",
     items: [],
+    objects: {},
     exits: { north: "bedroom" },
   },
 };
