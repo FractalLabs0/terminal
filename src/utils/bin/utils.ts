@@ -189,7 +189,10 @@ const npcs: { [key: string]: NPC } = {
            },
       "3": { message: "I'm trying to leave." ,
            responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
-           },           
+           },
+           "4": { message: "I'm trying to leave." ,
+           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
+           },                 
     },
   },
 };
