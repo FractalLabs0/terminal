@@ -60,10 +60,22 @@ x       │  Dahae                         │       │                        
 Type 'help' to see list of available commands.
 
 `};
+
+interface ObjectDescription {
+  id: string;
+  description: string;
+}
+
+interface LocationObject {
+  id: string;
+  descriptionId: string;
+}
+
 interface Location {
   name: string;
   description: string;
   items: string[];
+  objects: { [key: string]: LocationObject };
   exits: { [key: string]: string };
   npc?:string
 }
@@ -86,6 +98,7 @@ const locations: { [key: string]: Location } = {
     name: "Hospital bedroom",
     description: "You are standing in the midst of a beautiful and serene landscape.",
     items: ["rock"],
+    objects: { window: { id: "window", descriptionId: "windowDescription" } },
     exits: { east: "lobby" },
     npc: "Jenny",
   },
@@ -93,6 +106,7 @@ const locations: { [key: string]: Location } = {
     name: "Hospital Lobby",
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
+    objects: { sign: { id: "sign", descriptionId: "signDescription" } },
     exits: { west: "bedroom", south: "dahae" },
     npc: "RoboNurse"
   },
@@ -102,6 +116,43 @@ const locations: { [key: string]: Location } = {
     items: [],
     exits: { north: "bedroom" },
   },
+};
+
+const objectDescriptions: { [key: string]: ObjectDescription } = {
+  windowDescription: { id: "windowDescription", description: "The window offers a view of a peaceful garden." },
+  signDescription: { id: "signDescription", description: "The sign says 'Welcome to Newmont Hospital'." },
+};
+
+export const examine = (args: string[]): Promise<string> => {
+  const objectToExamine = args[0];
+  if (currentLocation.items.includes(objectToExamine)) {
+    switch (objectToExamine) {
+      case "rock":
+        return Promise.resolve("You examine the rock and find a strange symbol etched into its surface.");
+      case "datapad":
+        return Promise.resolve("You examine the datapad and see that it has a new function called 'unplug'.");
+      default:
+        return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
+    }
+  }
+  if (currentLocation.npc?.toLowerCase() === objectToExamine.toLowerCase()) {
+    switch (currentLocation.npc.toLowerCase()) {
+      case "jenny":
+        const jenny = npcs.jenny;
+        return Promise.resolve(`You examine ${objectToExamine} and hear her muttering something about "${jenny.dialogOptions[1].responseMessage}".`);
+      case "robonurse":
+        const roboNurse = npcs.roboNurse;
+        return Promise.resolve(`You examine ${objectToExamine} and see that ${roboNurse.name} has a message for you: "${roboNurse.message}".`);
+      default:
+        return Promise.resolve(`There's no ${objectToExamine} here.`);
+    }
+  }
+  if (currentLocation.objects[objectToExamine]) {
+    const object = currentLocation.objects[objectToExamine];
+    const objectDescription = objectDescriptions[object.descriptionId];
+    return Promise.resolve(`${objectDescription.description}`);
+  }
+  return Promise.resolve(`There's no ${objectToExamine} here to examine.`);
 };
 
 const npcs: { [key: string]: NPC } = {
