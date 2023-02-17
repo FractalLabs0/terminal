@@ -146,7 +146,7 @@ export const examine = (args: string[]): Promise<string> => {
         const jenny = npcs.jenny;
         return Promise.resolve(`You examine ${objectToExamine} and hear her muttering something about "${jenny.dialogOptions[1].responseMessage}".`);
       case "robonurse":
-        const roboNurse = npcs.roboNurse;
+        const roboNurse = npcs.RoboNurse;
         return Promise.resolve(`You examine ${objectToExamine} and see that ${roboNurse.name} has a message for you: "${roboNurse.message}".`);
       default:
         return Promise.resolve(`There's no ${objectToExamine} here.`);
