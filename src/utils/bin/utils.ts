@@ -97,7 +97,7 @@ const locations: { [key: string]: Location } = {
   bedroom: {
     name: "Hospital bedroom",
     description: "You are in a sparsely furnished hospital bedroom. There is a plain bed in the center of the room, a small window in the corner, and an open door to the east. By the bed is a tray with some scraps of food. ",
-    items: ["jello"],
+    items: ["jello", "rock"],
     objects: { window: { id: "window", descriptionId: "windowDescription" }, tray: { id: "tray", descriptionId: "trayDescription" }, bed: { id: "bed", descriptionId: "bedDescription" } },
     exits: { east: "lobby" },
   },
