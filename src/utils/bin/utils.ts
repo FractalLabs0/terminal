@@ -274,7 +274,7 @@ export const go = (direction: string): string => {
     return "You can't go that way.";
   }
   if (currentLocation.npc?.toLowerCase() === "robonurse" && inventory.includes("rock")) {
-    npcs.dialogOptions["4"] = {
+    npcs.robonurse.dialogOptions["4"] = {
       message: "(hidden option) Show her your hospital ID card." ,
       responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
           };
