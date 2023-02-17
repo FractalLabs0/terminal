@@ -284,12 +284,6 @@ export const take = (args: string[]): Promise<string> => {
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
-  if (currentLocation.npc.toLowerCase() === "jenny" && inventory.includes("rock")) {
-    return Promise.resolve("You took the rock, but Jenny doesn't seem interested in it.");
-  }
-  if (currentLocation.npc.toLowerCase() === "jenny" && !inventory.includes("rock")) {
-    return Promise.resolve("You took the item, but Jenny seems to be eyeing your rock...");
-  }
   return Promise.resolve(`You took ${args[0]}.`);
 };
 
