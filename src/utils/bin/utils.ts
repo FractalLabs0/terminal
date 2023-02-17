@@ -185,7 +185,7 @@ const npcs: { [key: string]: NPC } = {
         responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
            },
       "2": { message: "I don't belong here." ,
-           responseMessage: "You belong here. You don’t have a visitor’s pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don’t want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+           responseMessage: "You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
            },
       "3": { message: "I'm trying to leave." ,
            responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
@@ -284,12 +284,6 @@ export const take = (args: string[]): Promise<string> => {
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
   currentLocation.items.splice(index, 1);
-  if (currentLocation.npc.toLowerCase() === "jenny" && inventory.includes("rock")) {
-    return Promise.resolve("You took the rock, but Jenny doesn't seem interested in it.");
-  }
-  if (currentLocation.npc.toLowerCase() === "jenny" && !inventory.includes("rock")) {
-    return Promise.resolve("You took the item, but Jenny seems to be eyeing your rock...");
-  }
   return Promise.resolve(`You took ${args[0]}.`);
 };
 
