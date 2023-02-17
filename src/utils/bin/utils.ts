@@ -147,7 +147,7 @@ export const examine = (args: string[]): Promise<string> => {
         return Promise.resolve(`You examine ${objectToExamine} and hear her muttering something about "${jenny.dialogOptions[1].responseMessage}".`);
       case "robonurse":
         const roboNurse = npcs.RoboNurse;
-        return Promise.resolve(`You examine ${objectToExamine} and see that ${roboNurse.name} has a message for you: "${roboNurse.message}".`);
+        return Promise.resolve(`The robot nurse turns her head 90 degrees to meet your gaze, a broad smile affixed to her matte silver face. `);
       default:
         return Promise.resolve(`There's no ${objectToExamine} here.`);
     }
@@ -312,6 +312,23 @@ export const unplug = (): Promise<string> => {
     return Promise.resolve(displayLocation());
   }
   return Promise.resolve("You need the datapad to unplug.");
+};
+
+export const fight = (args: string[]): Promise<string> => {
+  const objectTofight = args[0];
+  if (currentLocation.npc?.toLowerCase() === objectTofight.toLowerCase()) {
+    switch (currentLocation.npc.toLowerCase()) {
+      case "jenny":
+        const jenny = npcs.jenny;
+        return Promise.resolve(`You try to fight ${objectTofight}. She roundhouse kicks you and you fall to the ground.\n DON'T mess with Jenny `);
+      case "robonurse":
+        const roboNurse = npcs.RoboNurse;
+        return Promise.resolve(`The robot nurse calmly extends a metal prong from her left arm. You feel cool metal on your thigh then suddenly—BZZZZT!\nYou've been tased!\nIt feels like there are a million angry robot bees swarming inside of your bones.\nYou better not try that again.`);
+      default:
+        return Promise.resolve(`There's no ${objectToExamine} here.`);
+    }
+  }
+  return Promise.resolve(`There's no ${objectTofight} here to fight.`);
 };
 
 export const adventure = async (args?: string[]): Promise<string> => {
