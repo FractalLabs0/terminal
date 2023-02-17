@@ -96,11 +96,10 @@ interface NPC {
 const locations: { [key: string]: Location } = {
   bedroom: {
     name: "Hospital bedroom",
-    description: "You are standing in the midst of a beautiful and serene landscape.",
-    items: ["rock"],
-    objects: { window: { id: "window", descriptionId: "windowDescription" } },
+    description: "You are in a sparsely furnished hospital bedroom. There is a plain bed in the center of the room, a small window in the corner, and an open door to the east. By the bed is a tray with some scraps of food. ",
+    items: ["jello"],
+    objects: { window: { id: "window", descriptionId: "windowDescription" }, tray: { id: "tray", descriptionId: "trayDescription" }, bed: { id: "bed", descriptionId: "bedDescription" } },
     exits: { east: "lobby" },
-    npc: "Jenny",
   },
   lobby: {
     name: "Hospital Lobby",
@@ -120,8 +119,10 @@ const locations: { [key: string]: Location } = {
 };
 
 const objectDescriptions: { [key: string]: ObjectDescription } = {
-  windowDescription: { id: "windowDescription", description: "The window offers a view of a peaceful garden." },
+  windowDescription: { id: "windowDescription", description: "You look out of the window and see a sprawling cityscape. You can see the signage of a building to the south: University of Newmont Caron Library." },
   signDescription: { id: "signDescription", description: "The sign says 'Welcome to Newmont Hospital'." },
+  trayDescription: { id: "trayDescription", description: "Nothing on this tray looks edible." },
+  bedDescription: { id: "bedDescription", description: "It doesn't look very comfortable." },
 };
 
 export const examine = (args: string[]): Promise<string> => {
@@ -132,6 +133,8 @@ export const examine = (args: string[]): Promise<string> => {
         return Promise.resolve("You examine the rock and find a strange symbol etched into its surface.");
       case "datapad":
         return Promise.resolve("You examine the datapad and see that it has a new function called 'unplug'.");
+        case "jello":
+          return Promise.resolve("You look at the container of jello. It’s an unappetizing dark green color. Yuck!");
       default:
         return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
     }
@@ -174,16 +177,21 @@ const npcs: { [key: string]: NPC } = {
   },
   robonurse: {
     name: "RoboNurse",
-    message: "GO. BACK. TO. YOUR. ROOM.",
+    message: "The robot nurse glides over to you and scans your body before saying: GO. BACK. TO. YOUR. ROOM.",
     dialogOptions: {
       "1": {
-        message: "Hello, where am I?",
-        responseMessage: "You are in Newmont's top mental facility. You're safe here as long as you GO. BACK. TO. YOUR. ROOM."
-      },
-      "2": { message: "Why can't I just walk out of here?" ,
-           responseMessage: "NO. ID. CARD. DETECTED."
+        message: "Where am I?",
+        responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
            },
-      
+      "2": { message: "I don't belong here." ,
+           responseMessage: "You belong here. You don’t have a visitor’s pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don’t want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+           },
+      "3": { message: "I'm trying to leave." ,
+           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
+           },           
+      "4": { message: "(hidden option) Show her your hospital ID card." ,
+           responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
+           },
     },
   },
 };
@@ -193,7 +201,7 @@ let inventory: string[] = [];
 const takenItems = new Set<string>();
 
 const displayLocation = (): string => {
-  let output = `You are in ${currentLocation.name}. ${currentLocation.description}`;
+  let output = `${currentLocation.description}`;
   const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
     output += `\nYou see the following items here: ${items.join(", ")}`;
@@ -227,9 +235,11 @@ export const talk = (option: string): Promise<string> => {
     return Promise.resolve("Invalid dialog option. Please try again.");
   }
   if (dialogOption.requiresItem && !inventory.includes(dialogOption.requiresItem)) {
-    return Promise.resolve(`You don't have the necessary item to select that option.`);
+    if (currentLocation.npc?.toLowerCase() === "robonurse" && dialogOption.message === "(hidden option) Show her your hospital ID card." && !inventory.includes("rock")) {
+      return Promise.resolve(`You need a rock to ask that question.`);
+    }
+    return Promise.resolve(dialogOption.responseMessage);
   }
-
   if (dialogOption.requiresItem) {
     const result = handleItemExchange(dialogOption.requiresItem, dialogOption.responseMessage);
     if (result) {
@@ -238,6 +248,7 @@ export const talk = (option: string): Promise<string> => {
   }
   return Promise.resolve(dialogOption.responseMessage);
 };
+
 
 const handleItemExchange = (item: string, responseMessage: string): string | undefined => {
   if (item === "rock") {
