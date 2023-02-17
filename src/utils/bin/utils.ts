@@ -107,14 +107,15 @@ const locations: { [key: string]: Location } = {
     items: ["datapad"],
     objects: { sign: { id: "sign", descriptionId: "signDescription" } },
     exits: { west: "bedroom", south: "dahae" },
-    npc: "RoboNurse"
+    npc: "RoboNurse",
   },
   dahae: {
     name: "Dahae",
     description: "You have unplugged and entered a new world!",
     items: [],
-    objects: {},
+    objects: { window: { id: "window", descriptionId: "windowDescription" } },
     exits: { north: "bedroom" },
+    npc: "Jenny",
   },
 };
 
@@ -134,7 +135,7 @@ export const examine = (args: string[]): Promise<string> => {
       case "datapad":
         return Promise.resolve("You examine the datapad and see that it has a new function called 'unplug'.");
         case "jello":
-          return Promise.resolve("You look at the container of jello. It’s an unappetizing dark green color. Yuck!");
+          return Promise.resolve("You look at the container of jello. It's an unappetizing dark green color. Yuck!");
       default:
         return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
     }
