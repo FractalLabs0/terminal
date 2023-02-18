@@ -115,7 +115,7 @@ const locations: { [key: string]: Location } = {
     description: "You are on the sidewalk of the bustling city. There are people all around, and the cacophony of voices, cars, and construction noises fill the air. You look around and try to get your bearings. The mental hospital is to the north. A sign points to the west: University of Newmont Campus. To the east is an impressive sky scraper with the word DAHAE arching across its entrance. A phone that doesn't seem to belong to anyone is laying on the pavement ",
     items: ["phone"],
     objects: { window: { id: "window", descriptionId: "windowDescription" } },
-    exits: { north: "lobby" },
+    exits: { north: "lobby", west: "library" },
   },
   medroom: {
     name: "Medical Records Room",
@@ -124,6 +124,14 @@ const locations: { [key: string]: Location } = {
     objects: { window: { id: "window", descriptionId: "windowDescription" } },
     exits: { west: "lobby" },
   },
+  library: {
+    name: "Caron Library",
+    description: "You are inside the University of Newmont's Caron Library. A lingering scent of coffee and hushed whispers immediately engulfs you. Rows of bookshelves stand tall, filled with a large array of physical books and digital discs. There are several college students at the study tables and a robot librarian that zips around silently, tidying up the vast library.",
+    items: ["IDnomo"],
+    objects: { librarian: { id: "robot", descriptionId: "robotDescription" }, robot: { id: "robot", descriptionId: "robotDescription" }, bookshelves: { id: "bookshelves", descriptionId: "bookshelvesDescription" }, book: { id: "bookshelves", descriptionId: "bookshelvesDescription" }, bookshelf: { id: "bookshelves", descriptionId: "bookshelvesDescription" } },
+    exits: { east: "sidewalk1" },
+    npc: "Girl",
+  },
 };
 
 const objectDescriptions: { [key: string]: ObjectDescription } = {
@@ -131,6 +139,8 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   signDescription: { id: "signDescription", description: "The sign says 'Welcome to Newmont Hospital'." },
   trayDescription: { id: "trayDescription", description: "Nothing on this tray looks edible." },
   bedDescription: { id: "bedDescription", description: "It doesn't look very comfortable." },
+  robotDescription: { id: "robotDescription", description: "Would you look at that? One of his arms seems to have a feather duster extension." },
+  bookshelvesDescription: { id: "bookshelvesDescription", description: "There are more digital discs than physical books on the shelves. Interestingly, the titles here seem to be written in French, as well as English and Kyoreugul." },
 };
 
 export const examine = (args: string[]): Promise<string> => {
@@ -158,8 +168,9 @@ export const examine = (args: string[]): Promise<string> => {
         const jenny = npcs.jenny;
         return Promise.resolve(`You examine ${objectToExamine} and hear her muttering something about "${jenny.dialogOptions[1].responseMessage}".`);
       case "robonurse":
-        const roboNurse = npcs.RoboNurse;
         return Promise.resolve(`The robot nurse turns her head 90 degrees to meet your gaze, a broad smile affixed to her matte silver face. `);
+      case "girl":
+        return Promise.resolve(`She is one of the few students in the library using physical books. They seem to be volumes on engineering.`);
       default:
         return Promise.resolve(`There's no ${objectToExamine} here.`);
     }
@@ -197,11 +208,30 @@ const npcs: { [key: string]: NPC } = {
         responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
            },
       "2": { message: "I don't belong here." ,
-           responseMessage: "You belong here. You don’t have a visitor’s pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don’t want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+           responseMessage: "You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
            },
       "3": { message: "I'm trying to leave." ,
            responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
            },             
+    },
+  },
+  girl: {
+    name: "Girl",
+    message: "A pretty girl sitting at one of the tables looks up from her studies and smiles at you politely before going back to her notes.",
+    dialogOptions: {
+      "1": {
+        message: "Where am I?",
+        responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
+           },
+      "2": { message: "I don't belong here." ,
+           responseMessage: "You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+           },
+      "3": { message: "I'm trying to leave." ,
+           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
+           },
+      "4": { message: "I'm trying to leave." ,
+           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
+           },                    
     },
   },
 };
@@ -214,10 +244,10 @@ const displayLocation = (): string => {
   let output = `${currentLocation.description}`;
   const items = currentLocation.items.filter((item) => !takenItems.has(item));
   if (items.length > 0) {
-    output += `\nYou see the following items here: ${items.join(", ")}`;
+    output += `\n\nYou see the following items here: ${items.join(", ")}`;
   }
 
-  
+  //robotcheck ID card
   if (currentLocation.npc?.toLowerCase() === "robonurse") {
     if (inventory.includes("IDcard")) {
       npcs.robonurse.dialogOptions["4"] = {
@@ -229,11 +259,23 @@ const displayLocation = (): string => {
     }
   }
 
+  //girlcheck
+  if (currentLocation.npc?.toLowerCase() === "girl") {
+    if (inventory.includes("IDnomo")) {
+      npcs.girl.dialogOptions["4"] = {
+        message: "(hidden option) Show her Nomo Bouchard's student ID card.",
+        requiresItem: "IDnomo",
+        responseMessage: "“Oh my gosh!” she exclaims, drawing some irritated looks from the other students. “This is my friend's card. I'm sorry, do you know Nomo?”\nYou lie and say that you do.\nYou can tell that she can tell that you're lying.\n\n“O-okay… well, I'll just take this,” she takes the ID card from your hand. “He and I both intern at FRV, so I'll give it to him later today when I see him.”\nThe two of you stare at each other in awkward silence.\n“Thanks,” she says, then turns away."
+      };
+    } else {
+      delete npcs.robonurse.dialogOptions["4"];
+    }
+  }
 
 
   if (currentLocation.npc) {
     const npc = npcs[currentLocation.npc.toLowerCase()];
-    output += `\n${npc.name} says: ${npc.message}\n`;
+    output += `\n(${npc.name}): ${npc.message}\n`;
     let i = 1;
     for (const option in npc.dialogOptions) {
       const dialogOption = npc.dialogOptions[option];
@@ -287,6 +329,15 @@ const handleItemExchange = (item: string, responseMessage: string): string | und
     inventory.push("key");
     return responseMessage;
   }
+
+  if (item === "IDnomo") {
+    const index = inventory.indexOf("IDnomo");
+    if (index === -1) {
+      return `You don't have the necessary item to select that option.`;
+    }
+    inventory.splice(index, 1);
+    return responseMessage;
+  }
   return undefined;
 };
 
@@ -302,6 +353,7 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
+let phonePickedUp = false;
 export const take = (args: string[]): Promise<string> => {
   const index = currentLocation.items.indexOf(args[0]);
   if (index === -1) {
@@ -312,29 +364,36 @@ export const take = (args: string[]): Promise<string> => {
   inventory.push(currentLocation.items[index]);
 
   if (currentLocation.items[index] === "phone") {
-    const dialogSequence = [
-      "YOU: 'Hello?'\n",
-      "VOICE: 'HELLO—Ope—ray'\n",
-      "YOU: 'I'm sorry. I can't hear you very well, I—'\n",
-      "The static suddenly disappears and you can hear the voice clearly.\n",
-      "VOICE: 'Operator, we don't have much time. The connection in this module is very weak. We can guarantee a clean unplug but you must be at the extraction point within two hours.'\n",
-      "YOU: 'What?'\n",
-      "VOICE: 'The weapons room. Again, Operator—'\n",
-      "YOU: '…I don't think I am who you think I am.'\n",
-      "VOICE: '—we have to manually disconnect you if you don't make it there in time. Make your way out of the hospital and head to the weapons room.'\n\n",
-      "The phone emits a shrieking noise so loud you almost drop it. \n\n\n",
-      "YOU: 'Hello?'\n\n\n\n...\n\n\n\nYOU: 'Hello??'\n\n\n",
-      "The call has ended." 
-    ];
+    if (!phonePickedUp) {
+      const dialogSequence = [
+        "YOU: 'Hello?'\n",
+        "VOICE: 'HELLO—Ope—ray'\n",
+        "YOU: 'I'm sorry. I can't hear you very well, I—'\n",
+        "The static suddenly disappears and you can hear the voice clearly.\n",
+        "VOICE: 'Operator, we don't have much time. The connection in this module is very weak. We can guarantee a clean unplug but you must be at the extraction point within two hours.'\n",
+        "YOU: 'What?'\n",
+        "VOICE: 'The weapons room. Again, Operator—'\n",
+        "YOU: '…I don't think I am who you think I am.'\n",
+        "VOICE: '—we have to manually disconnect you if you don't make it there in time. Make your way out of the hospital and head to the weapons room.'\n\n",
+        "The phone emits a shrieking noise so loud you almost drop it. \n\n\n",
+        "YOU: 'Hello?'\n\n\n\n...\n\n\n\nYOU: 'Hello??'\n\n\n",
+        "The call has ended."
+      ];
 
-    const output = dialogSequence.join("");
-    currentLocation.items.splice(index, 1);
-    return Promise.resolve(`${output}\nYou took ${args[0]}.`);
+      phonePickedUp = true;
+      const output = dialogSequence.join("");
+      currentLocation.items.splice(index, 1);
+      return Promise.resolve(`${output}\nYou took ${args[0]}.`);
+    } else {
+      currentLocation.items.splice(index, 1);
+      return Promise.resolve(`You took ${args[0]}.`);
+    }
   } else {
     currentLocation.items.splice(index, 1);
     return Promise.resolve(`You took ${args[0]}.`);
   }
 };
+
 
 
 export const drop = (args: string[]): Promise<string> => {
