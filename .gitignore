@@ -45,3 +45,5 @@ bin/
 _static/
 
 .vscode/
+@serverSTART.bat
+@serverSTART.txt

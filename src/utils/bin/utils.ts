@@ -189,10 +189,7 @@ const npcs: { [key: string]: NPC } = {
            },
       "3": { message: "I'm trying to leave." ,
            responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
-           },
-           "4": { message: "I'm trying to leave." ,
-           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
-           },                 
+           },             
     },
   },
 };
@@ -207,6 +204,21 @@ const displayLocation = (): string => {
   if (items.length > 0) {
     output += `\nYou see the following items here: ${items.join(", ")}`;
   }
+
+  
+  if (currentLocation.npc?.toLowerCase() === "robonurse") {
+    if (inventory.includes("rock")) {
+      npcs.robonurse.dialogOptions["4"] = {
+        message: "(hidden option) Show her your hospital ID card.",
+        responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
+      };
+    } else {
+      delete npcs.robonurse.dialogOptions["4"];
+    }
+  }
+
+
+
   if (currentLocation.npc) {
     const npc = npcs[currentLocation.npc.toLowerCase()];
     output += `\n${npc.name} says: ${npc.message}\n`;
@@ -273,12 +285,7 @@ export const go = (direction: string): string => {
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
   }
-  if (currentLocation.npc?.toLowerCase() === "robonurse" && inventory.includes("rock")) {
-    npcs.robonurse.dialogOptions["4"] = {
-      message: "(hidden option) Show her your hospital ID card." ,
-      responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
-          };
-  }
+
   currentLocation = locations[currentLocation.exits[direction]];
   return displayLocation();
 };
