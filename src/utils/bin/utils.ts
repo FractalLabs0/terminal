@@ -57,6 +57,7 @@ x       │  Dahae                         │       │                        
         x             x            x                                     Rift
         x                                    x      x        x Rift
                 Rift          x                        x
+                
 Type 'help' to see list of available commands.
 
 `};
@@ -106,16 +107,22 @@ const locations: { [key: string]: Location } = {
     description: "You find yourself in a vast underground facility.",
     items: ["datapad"],
     objects: { sign: { id: "sign", descriptionId: "signDescription" } },
-    exits: { west: "bedroom", south: "dahae" },
+    exits: { west: "bedroom", south: "sidewalk1", east: "medroom" },
     npc: "RoboNurse",
   },
-  dahae: {
-    name: "Dahae",
-    description: "You have unplugged and entered a new world!",
-    items: [],
+  sidewalk1: {
+    name: "Sidewalk",
+    description: "You are on the sidewalk of the bustling city. There are people all around, and the cacophony of voices, cars, and construction noises fill the air. You look around and try to get your bearings. The mental hospital is to the north. A sign points to the west: University of Newmont Campus. To the east is an impressive sky scraper with the word DAHAE arching across its entrance. A phone that doesn't seem to belong to anyone is laying on the pavement ",
+    items: ["phone"],
     objects: { window: { id: "window", descriptionId: "windowDescription" } },
-    exits: { north: "bedroom" },
-    npc: "Jenny",
+    exits: { north: "lobby" },
+  },
+  medroom: {
+    name: "Medical Records Room",
+    description: "You quickly walk down the corridor, avoiding eye contact with the robot nurse stationed in the lobby, and find yourself in the Medical Records Room. No one seems to be here, but the low hum of the data servers in this room feels make them seem oddly alive.\nThere is a coat slung over a chair by the light switch. Someone must have left it behind accidentally.",
+    items: ["coat"],
+    objects: { window: { id: "window", descriptionId: "windowDescription" } },
+    exits: { west: "lobby" },
   },
 };
 
@@ -128,14 +135,19 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
 
 export const examine = (args: string[]): Promise<string> => {
   const objectToExamine = args[0];
-  if (currentLocation.items.includes(objectToExamine)) {
+  if (currentLocation.items.includes(objectToExamine)|| inventory.includes(objectToExamine)) {
     switch (objectToExamine) {
       case "rock":
         return Promise.resolve("You examine the rock and find a strange symbol etched into its surface.");
       case "datapad":
         return Promise.resolve("You examine the datapad and see that it has a new function called 'unplug'.");
-        case "jello":
-          return Promise.resolve("You look at the container of jello. It's an unappetizing dark green color. Yuck!");
+      case "jello":
+        return Promise.resolve("You look at the container of jello. It's an unappetizing dark green color. Yuck!");
+      case "coat":
+        inventory.push("IDcard");
+        return Promise.resolve("A doctor's hospital ID falls out of the coat!");    
+      case "IDcard":
+        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard.");     
       default:
         return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
     }
@@ -207,7 +219,7 @@ const displayLocation = (): string => {
 
   
   if (currentLocation.npc?.toLowerCase() === "robonurse") {
-    if (inventory.includes("rock")) {
+    if (inventory.includes("IDcard")) {
       npcs.robonurse.dialogOptions["4"] = {
         message: "(hidden option) Show her your hospital ID card.",
         responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
@@ -248,12 +260,12 @@ export const talk = (option: string): Promise<string> => {
     return Promise.resolve("Invalid dialog option. Please try again.");
   }
 
-  if (dialogOption.requiresItem && !inventory.includes(dialogOption.requiresItem)) {
-    if (currentLocation.npc?.toLowerCase() === "robonurse" && dialogOption.message === "(hidden option) Show her your hospital ID card." && !inventory.includes("rock")) {
-      return Promise.resolve(`You need a rock to ask that question.`);
-    }
-    return Promise.resolve(dialogOption.responseMessage);
-  }
+  //if (dialogOption.requiresItem && !inventory.includes(dialogOption.requiresItem)) {
+    //if (currentLocation.npc?.toLowerCase() === "robonurse" && dialogOption.message === "(hidden option) Show her your hospital ID card." && !inventory.includes("rock")) {
+   //   return Promise.resolve(`You need a rock to ask that question.`);
+   // }
+  //  return Promise.resolve(dialogOption.responseMessage);
+ // }
   
   if (dialogOption.requiresItem) {
     const result = handleItemExchange(dialogOption.requiresItem, dialogOption.responseMessage);
@@ -279,8 +291,8 @@ const handleItemExchange = (item: string, responseMessage: string): string | und
 };
 
 export const go = (direction: string): string => {
-  if (currentLocation.name === "lobby" && direction === "south" && !inventory.includes("rock")) {
-    return "You can't get out of the hopital without the rock.";
+  if (currentLocation.name === "lobby" && direction === "south" && !inventory.includes("IDcard")) {
+    return "You cannot exit the hospital. The robot nurse is watching you closely.";
   }
   if (!currentLocation.exits[direction]) {
     return "You can't go that way.";
@@ -290,17 +302,40 @@ export const go = (direction: string): string => {
   return displayLocation();
 };
 
-
 export const take = (args: string[]): Promise<string> => {
   const index = currentLocation.items.indexOf(args[0]);
   if (index === -1) {
     return Promise.resolve("That item isn't here. Current location: " + currentLocation.name);
   }
+
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
-  currentLocation.items.splice(index, 1);
-  return Promise.resolve(`You took ${args[0]}.`);
+
+  if (currentLocation.items[index] === "phone") {
+    const dialogSequence = [
+      "YOU: 'Hello?'\n",
+      "VOICE: 'HELLO—Ope—ray'\n",
+      "YOU: 'I'm sorry. I can't hear you very well, I—'\n",
+      "The static suddenly disappears and you can hear the voice clearly.\n",
+      "VOICE: 'Operator, we don't have much time. The connection in this module is very weak. We can guarantee a clean unplug but you must be at the extraction point within two hours.'\n",
+      "YOU: 'What?'\n",
+      "VOICE: 'The weapons room. Again, Operator—'\n",
+      "YOU: '…I don't think I am who you think I am.'\n",
+      "VOICE: '—we have to manually disconnect you if you don't make it there in time. Make your way out of the hospital and head to the weapons room.'\n\n",
+      "The phone emits a shrieking noise so loud you almost drop it. \n\n\n",
+      "YOU: 'Hello?'\n\n\n\n...\n\n\n\nYOU: 'Hello??'\n\n\n",
+      "The call has ended." 
+    ];
+
+    const output = dialogSequence.join("");
+    currentLocation.items.splice(index, 1);
+    return Promise.resolve(`${output}\nYou took ${args[0]}.`);
+  } else {
+    currentLocation.items.splice(index, 1);
+    return Promise.resolve(`You took ${args[0]}.`);
+  }
 };
+
 
 export const drop = (args: string[]): Promise<string> => {
   const item = args[0];
@@ -323,7 +358,7 @@ export const use = (args: string[]):Promise<string> => {
 
 export const unplug = (): Promise<string> => {
   if (inventory.includes("datapad")) {
-    currentLocation = locations.dahae;
+    currentLocation = locations.bedroom;
     return Promise.resolve(displayLocation());
   }
   return Promise.resolve("You need the datapad to unplug.");
