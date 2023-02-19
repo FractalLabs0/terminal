@@ -146,8 +146,16 @@ const locations: { [key: string]: Location } = {
     description: "You enter the open office area, feeling a brief tingle on your skin as a security sensor scans you for possible unsafe items. The space is flooded with natural light from the expansive windows, which are lined with living ivy. Work stations with state-of-the-art terminals are arranged in neat rows, each one occupied by a busy Dahae employee focused intently on their work.",
     items: [],
     objects: { window: { id: "window2", descriptionId: "window2Description" }, windows: { id: "window2", descriptionId: "window2Description" }, ivy: { id: "ivy", descriptionId: "ivyDescription" }, employee : { id: "employee", descriptionId: "employeeDescription" }, employees : { id: "employee", descriptionId: "employeeDescription" }, terminal: { id: "¨terminal", descriptionId: "terminalDescription" }, terminals: { id: "¨terminal", descriptionId: "terminalDescription" } },
-    exits: { east: "office", west: "sidewalk1" },
+    exits: { south: "hallway", west: "dahae" },
     npc: "Receptionist",
+  },
+  hallway: {
+    name: "Hallway",
+    description: "You find yourself standing in a brightly lit office hallway, lined with closed doors. The only sound your hear is the soft whir of the atmosphere conditioning ducts, somewhere out of sight.You notice a set of elevator doors at the end of the hall, with a rather imposing looking robot standing guard in front of them. It doesn't say anything but you can tell by the way its eyes are tracking your movements that this is not an area of the building you should be exploring.\nThere is a wallet on the floor by your feet. It must have fallen out of a Dahae employee's pocket.",
+    items: ["wallet"],
+    objects: { elevator: { id: "elevator", descriptionId: "elevatorDescription" }, door: { id: "door", descriptionId: "doorDescription" }, doors: { id: "door", descriptionId: "doorDescription" }},
+    exits: { north: "office" },
+    npc: "Patrolbot",
   },
 };
 
@@ -165,6 +173,8 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   ivyDescription: { id: "ivyDescription", description: "You reach out and feel an ivy leaf. It's real." },
   employeeDescription: { id: "employeeDescription", description: "They seem busy. Best not bother them." },
   terminalDescription: { id: "terminalDescription", description: "These are definitely not your typical consumer model terminals." },
+  elevatorDescription: { id: "elevatorDescription", description: "It's an elevator. It goes up and down." },
+  doorDescription: { id: "doorDescription", description: "They're locked. You shouldn't try to open them. The robot is watching you." },
 };
 
 export const examine = (args: string[]): Promise<string> => {
@@ -183,7 +193,9 @@ export const examine = (args: string[]): Promise<string> => {
         inventory.push("IDcard");
         return Promise.resolve("A doctor's hospital ID falls out of the coat!");    
       case "IDcard":
-        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard.");     
+        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard."); 
+      case "wallet":
+         return Promise.resolve("It has some cash inside but nothing else.");     
       default:
         return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
     }
@@ -199,6 +211,8 @@ export const examine = (args: string[]): Promise<string> => {
         return Promise.resolve(`She is one of the few students in the library using physical books. They seem to be volumes on engineering.`);
       case "receptionist":
       return Promise.resolve(`He looks friendly.`);
+      case "patrolbot":
+      return Promise.resolve(`You're not sure why but its eyes make you feel uneasy.`);
       default:
         return Promise.resolve(`There's no ${objectToExamine} here.`);
     }
@@ -218,6 +232,27 @@ export const examine = (args: string[]): Promise<string> => {
 };
 
 const npcs: { [key: string]: NPC } = {
+
+  patrolbot: {
+    name: "Patrolbot",
+    message: "You nod your head at the patrolbot and it nods back, acknowledging your presence.",
+    dialogOptions: {
+      "1": {
+        message: "Howdy, partner!",
+        responseMessage: "The robot turns its body and tilts head at an angle and observes you intently before resuming his standing position, apparently unamused by your friendly greeting."
+      },
+      "2": { message: "Excuse me, I'd like to use the elevator." ,
+           responseMessage: "PATROLBOT: “You do not seem to have the right security clearance level to access the elevators. Please speak to a qualified attendant if you believe this is an error.”"
+           },
+      "3": { message: "I'm looking for the bathroom." ,
+           responseMessage: "PATROLBOT: “Public bathrooms are located near the lobby.”"
+           },
+      "4": { message: "Come here often?" ,
+           responseMessage: "PATROLBOT: “I'm sorry, I don't understand your question.”\nPATROLBOT: …\nPATROLBOT: “I am always here.”"
+           },     
+    },
+  },
+
   jenny: {
     name: "Jenny",
     message: "Hi, I'm Jenny. Nice to meet you!",
@@ -417,6 +452,13 @@ export const take = (args: string[]): Promise<string> => {
   takenItems.add(currentLocation.items[index]);
   inventory.push(currentLocation.items[index]);
 
+
+  if (currentLocation.items[index] === "wallet") {
+  currentLocation.items.splice(index, 1);
+  return Promise.resolve(`The robot doesn't say or do anything when you reach down to pick the wallet up.\nItem added to inventory.`);
+  } 
+
+
   if (currentLocation.items[index] === "phone") {
     if (!phonePickedUp) {
       const dialogSequence = [
@@ -489,6 +531,8 @@ export const fight = (args: string[]): Promise<string> => {
         return Promise.resolve(`The robot nurse calmly extends a metal prong from her left arm. You feel cool metal on your thigh then suddenly—BZZZZT!\nYou've been tased!\nIt feels like there are a million angry robot bees swarming inside of your bones.\nYou better not try that again.`);
         case "girl":
         return Promise.resolve(`This is a library. Stay calm.`);
+        case "patrolbot":
+          return Promise.resolve(`You muster up the courage and rush toward the robot.\nIt turns to look at you and its eyes flash green. You feel a brain splitting headache and fall to your knees, clutching your head.\nIt takes you a minute before you can stand back up. You're not sure what just happened.\nYou look cautiously at the robot. It stares you down but doesn't move from its position.\n\nYou better not try that again.`);
       default:
         return Promise.resolve(`There's no ${objectTofight} here.`);
     }
