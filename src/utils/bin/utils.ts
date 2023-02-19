@@ -57,9 +57,10 @@ x       │  Dahae                         │       │                        
         x             x            x                                     Rift
         x                                    x      x        x Rift
                 Rift          x                        x
+
+You open your eyes, feeling disoriented and weak. You seem to be laying down on a hospital bed. Fluorescent lights blare down from the ceiling and you hear the faint hum of electrical units. You look down and see that you are dressed in all white. Your stomach sinks. Something is very wrong. You can't remember who you are or why you're in this room.             
                 
 Type 'help' to see list of available commands.
-
 `};
 
 interface ObjectDescription {
@@ -112,10 +113,10 @@ const locations: { [key: string]: Location } = {
   },
   sidewalk1: {
     name: "Sidewalk",
-    description: "You are on the sidewalk of the bustling city. There are people all around, and the cacophony of voices, cars, and construction noises fill the air. You look around and try to get your bearings. The mental hospital is to the north. A sign points to the west: University of Newmont Campus. To the east is an impressive sky scraper with the word DAHAE arching across its entrance. A phone that doesn't seem to belong to anyone is laying on the pavement ",
+    description: "You are on the sidewalk of the bustling city. There are people all around, and the cacophony of voices, cars, and construction noises fill the air. You look around and try to get your bearings. The mental hospital is to the north. A signpost points to the west: University of Newmont Campus. To the east is an impressive sky scraper with the word DAHAE arching across its entrance. A phone that doesn't seem to belong to anyone is laying on the pavement ",
     items: ["phone"],
-    objects: { window: { id: "window", descriptionId: "windowDescription" } },
-    exits: { north: "lobby", west: "library" },
+    objects: { signpost: { id: "signpost", descriptionId: "signpostDescription" } },
+    exits: { north: "lobby", west: "library", east: "dahae" },
   },
   medroom: {
     name: "Medical Records Room",
@@ -132,6 +133,22 @@ const locations: { [key: string]: Location } = {
     exits: { east: "sidewalk1" },
     npc: "Girl",
   },
+  dahae: {
+    name: "Dahae's headquarters",
+    description: "You are inside the lobby of Dahae's headquarters. Futuristic and sleek, the space makes it evident that Dahae is a major tech company. A massive digital display along the back of the receptionist's desk, looping a short video that exhibits some of the company's latest innovations. You find your eyes hypnotically drawn to the display",
+    items: ["magazine"],
+    objects: { desk: { id: "desk", descriptionId: "deskDescription" }, display: { id: "display", descriptionId: "displayDescription" } },
+    exits: { east: "office", west: "sidewalk1" },
+    npc: "Receptionist",
+  },
+  office: {
+    name: "Office",
+    description: "You enter the open office area, feeling a brief tingle on your skin as a security sensor scans you for possible unsafe items. The space is flooded with natural light from the expansive windows, which are lined with living ivy. Work stations with state-of-the-art terminals are arranged in neat rows, each one occupied by a busy Dahae employee focused intently on their work.",
+    items: [],
+    objects: { window: { id: "window2", descriptionId: "window2Description" }, windows: { id: "window2", descriptionId: "window2Description" }, ivy: { id: "ivy", descriptionId: "ivyDescription" }, employee : { id: "employee", descriptionId: "employeeDescription" }, employees : { id: "employee", descriptionId: "employeeDescription" }, terminal: { id: "¨terminal", descriptionId: "terminalDescription" }, terminals: { id: "¨terminal", descriptionId: "terminalDescription" } },
+    exits: { east: "office", west: "sidewalk1" },
+    npc: "Receptionist",
+  },
 };
 
 const objectDescriptions: { [key: string]: ObjectDescription } = {
@@ -141,6 +158,13 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   bedDescription: { id: "bedDescription", description: "It doesn't look very comfortable." },
   robotDescription: { id: "robotDescription", description: "Would you look at that? One of his arms seems to have a feather duster extension." },
   bookshelvesDescription: { id: "bookshelvesDescription", description: "There are more digital discs than physical books on the shelves. Interestingly, the titles here seem to be written in French, as well as English and Kyoreugul." },
+  deskDescription: { id: "deskDescription", description: "There is nothing on the receptionist's desk." },
+  displayDescription: { id: "displayDescription", description: "Dahae seems to be a major manufacturer of Personal Bots." },
+  signpostDescription: { id: "signpostDescription", description: "Judging by the sign, Newmont University seems like an expensive school." },
+  window2Description: { id: "window2Description", description: "You look out of the window see a serene forest instead of the city. From a distance you can see what looks like a herd of shaggy unicorns.\n\nWait, what? \n…These must be digital panels, not windows." },
+  ivyDescription: { id: "ivyDescription", description: "You reach out and feel an ivy leaf. It's real." },
+  employeeDescription: { id: "employeeDescription", description: "They seem busy. Best not bother them." },
+  terminalDescription: { id: "terminalDescription", description: "These are definitely not your typical consumer model terminals." },
 };
 
 export const examine = (args: string[]): Promise<string> => {
@@ -153,6 +177,8 @@ export const examine = (args: string[]): Promise<string> => {
         return Promise.resolve("You examine the datapad and see that it has a new function called 'unplug'.");
       case "jello":
         return Promise.resolve("You look at the container of jello. It's an unappetizing dark green color. Yuck!");
+      case "magazine":
+      return Promise.resolve("“Current Signals” magazine seems to be a tech-focused lifestyle publication. You flip through it and find nothing that interests you. It is mostly written in English with small sections in Kyoreugul.");
       case "coat":
         inventory.push("IDcard");
         return Promise.resolve("A doctor's hospital ID falls out of the coat!");    
@@ -171,16 +197,24 @@ export const examine = (args: string[]): Promise<string> => {
         return Promise.resolve(`The robot nurse turns her head 90 degrees to meet your gaze, a broad smile affixed to her matte silver face. `);
       case "girl":
         return Promise.resolve(`She is one of the few students in the library using physical books. They seem to be volumes on engineering.`);
+      case "receptionist":
+      return Promise.resolve(`He looks friendly.`);
       default:
         return Promise.resolve(`There's no ${objectToExamine} here.`);
     }
+  }
+  if (currentLocation.name === "office" && (objectToExamine.toLowerCase()==="window" || objectToExamine==="window") ){
+    return Promise.resolve(`You look out of the window see a serene forest instead of the city. From a distance you can see what looks like a herd of shaggy unicorns.`)
   }
   if (currentLocation.objects[objectToExamine]) {
     const object = currentLocation.objects[objectToExamine];
     const objectDescription = objectDescriptions[object.descriptionId];
     return Promise.resolve(`${objectDescription.description}`);
   }
+
+
   return Promise.resolve(`There's no ${objectToExamine} here to examine.`);
+
 };
 
 const npcs: { [key: string]: NPC } = {
@@ -220,25 +254,45 @@ const npcs: { [key: string]: NPC } = {
     message: "A pretty girl sitting at one of the tables looks up from her studies and smiles at you politely before going back to her notes.",
     dialogOptions: {
       "1": {
-        message: "Where am I?",
-        responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
+        message: "Hey, I'm a little lost…",
+        responseMessage: "“Okay…?” She says with a hesitant smile. “So can I help you…?”\nShe seems a little creeped out.\nYou shake your head and mumble, “Nevermind.”"
            },
-      "2": { message: "I don't belong here." ,
-           responseMessage: "You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+      "2": { message: "What is this place?" ,
+           responseMessage: "She looks at you for a second before pointing to the giant sign by the door that says: University of Newmont: Caron Library."
            },
-      "3": { message: "I'm trying to leave." ,
-           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
-           },
-      "4": { message: "I'm trying to leave." ,
-           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
-           },                    
+      "3": { message: "So what's good, lil mama?" ,
+           responseMessage: "She wrinkles her nose in obvious disgust, then turns back to her tablet and resumes studying.\n “Please leave,” she says, refusing to meet eyes with you, \n“Or I'm going to call over the librarian.”"
+           },               
     },
   },
+  receptionist: {
+    name: "Receptionist",
+    message: "The robot receptionist at the desk notices your stare and lifts his arm to wave hello.",
+    dialogOptions: {
+      "1": {
+        message: "What is this place?",
+        responseMessage: "Welcome to Dahae's headquarters, located in the heart of Newmont! Together, we can do anything. While most people know us for creating the best Personal Bots on the market, Dahae is first and foremost an innovation company. We're excited to have you here as our guest."
+           },
+      "2": { message: "I need some help." ,
+           responseMessage: "I can certainly help you. What did you require assistance with?\n\nAfter a few seconds of consideration, you decide to be be brutally blunt with the receptionist robot.\nYOU: “I woke up from a mental hospital today and I can't remember anything. Someone called me on a phone I found on the sidewalk. They told me to find a room full of weapons.”\n\n...\n\nRECEPTIONIST: “I can't help you with that.” "
+           },
+      "3": { message: "I would like a tour." ,
+           responseMessage: "RECEPTIONIST: “We don't have any tour guides available at this time but you are more than welcome to explore our lobby and take a look at our open office area, located in the east pavilion.”"
+           },
+      "4": { message: "…Do you guys sell weapons?" ,
+           responseMessage: "RECEPTIONIST: …\n\n No."
+           },                         
+    },
+  },  
 };
 
 let currentLocation = locations.bedroom;
 let inventory: string[] = [];
 const takenItems = new Set<string>();
+
+export const here = (): Promise<string> => {
+return Promise.resolve(displayLocation());
+}
 
 const displayLocation = (): string => {
   let output = `${currentLocation.description}`;
@@ -268,7 +322,7 @@ const displayLocation = (): string => {
         responseMessage: "“Oh my gosh!” she exclaims, drawing some irritated looks from the other students. “This is my friend's card. I'm sorry, do you know Nomo?”\nYou lie and say that you do.\nYou can tell that she can tell that you're lying.\n\n“O-okay… well, I'll just take this,” she takes the ID card from your hand. “He and I both intern at FRV, so I'll give it to him later today when I see him.”\nThe two of you stare at each other in awkward silence.\n“Thanks,” she says, then turns away."
       };
     } else {
-      delete npcs.robonurse.dialogOptions["4"];
+      delete npcs.girl.dialogOptions["4"];
     }
   }
 
@@ -433,6 +487,8 @@ export const fight = (args: string[]): Promise<string> => {
       case "robonurse":
         const roboNurse = npcs.RoboNurse;
         return Promise.resolve(`The robot nurse calmly extends a metal prong from her left arm. You feel cool metal on your thigh then suddenly—BZZZZT!\nYou've been tased!\nIt feels like there are a million angry robot bees swarming inside of your bones.\nYou better not try that again.`);
+        case "girl":
+        return Promise.resolve(`This is a library. Stay calm.`);
       default:
         return Promise.resolve(`There's no ${objectTofight} here.`);
     }
