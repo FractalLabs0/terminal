@@ -128,9 +128,9 @@ const locations: { [key: string]: Location } = {
   library: {
     name: "Caron Library",
     description: "You are inside the University of Newmont's Caron Library. A lingering scent of coffee and hushed whispers immediately engulfs you. Rows of bookshelves stand tall, filled with a large array of physical books and digital discs. There are several college students at the study tables and a robot librarian that zips around silently, tidying up the vast library.",
-    items: ["IDnomo"],
+    items: [],
     objects: { librarian: { id: "robot", descriptionId: "robotDescription" }, robot: { id: "robot", descriptionId: "robotDescription" }, bookshelves: { id: "bookshelves", descriptionId: "bookshelvesDescription" }, book: { id: "bookshelves", descriptionId: "bookshelvesDescription" }, bookshelf: { id: "bookshelves", descriptionId: "bookshelvesDescription" } },
-    exits: { east: "sidewalk1" },
+    exits: { east: "sidewalk1", south:"lecturehall" },
     npc: "Girl",
   },
   dahae: {
@@ -157,6 +157,27 @@ const locations: { [key: string]: Location } = {
     exits: { north: "office" },
     npc: "Patrolbot",
   },
+  lecturehall: {
+    name: "Lecture Hall",
+    description: "You walk inside a large, empty room filled with rows of seats. There is a plaque by the door with the words: “University of Newmont: Lecture Hall C”. A blank holoscreen commands most of the wall behind the lectern, glowing faintly with traces of mathematical equations from a previous class. You hear the faintest echo of footsteps from outside the lecture hall.\nA student ID card lays on the floor. Someone must have dropped it. ",
+    items: ["IDnomo"],
+    objects: { plaque: { id: "plaque", descriptionId: "plaqueDescription" }, holoscreen: { id: "holoscreen", descriptionId: "holoscreenDescription" } },
+    exits: { north: "library", south: "sidewalk3" },
+  },
+  sidewalk3: {
+    name: "Sidewalk3",
+    description: "The city sidewalk you are on is flanked by towering buildings that cast deep shadows. From above the glinting skyscraper windows you catch glimpses of fluffy white clouds as sunshine filters down. The street curves at an angle; to the north you see the University of Newmont and to the east is a gated park entrance surrounded by flowers and ornamental shrubbery.",
+    items: [],
+    objects: { flower: { id: "flower", descriptionId: "flowerDescription" }, flowers: { id: "flower", descriptionId: "flowerDescription" }  },
+    exits: { north: "lecturehall" },//NEED EAST = WESTENTRANCE
+  },
+  sidewalk2: {
+    name: "Sidewalk2",
+    description: "The city is teeming with life. People and cars rush by and for a moment you feel at peace. Despite not being able to remember who you are, or knowing why you feel the compulsion to “find the weapons room” like the strange phone call directed you to do… the warm summer air and purposeful activity of the city’s inhabitants makes you feel normal. Whatever “normal” means, anyway. You catch the scent of blooming flowers coming from the south.",
+    items: [],
+    objects: {  },
+    exits: { north: "sidewalk1" },//NEED south = WESTENTRANCE
+  },
 };
 
 const objectDescriptions: { [key: string]: ObjectDescription } = {
@@ -175,6 +196,9 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   terminalDescription: { id: "terminalDescription", description: "These are definitely not your typical consumer model terminals." },
   elevatorDescription: { id: "elevatorDescription", description: "It's an elevator. It goes up and down." },
   doorDescription: { id: "doorDescription", description: "They're locked. You shouldn't try to open them. The robot is watching you." },
+  plaqueDescription: { id: "plaqueDescription", description: "I wonder where lecture halls A and B are…" },
+  holoscreenDescription: { id: "holoscreenDescription", description: "The professor who last used this didn't do a very good job wiping the screen clean." },
+  flowerDescription: { id: "flowerDescription", description: "They are brightly colored, trumpet-shaped blooms" },
 };
 
 export const examine = (args: string[]): Promise<string> => {
@@ -193,9 +217,13 @@ export const examine = (args: string[]): Promise<string> => {
         inventory.push("IDcard");
         return Promise.resolve("A doctor's hospital ID falls out of the coat!");    
       case "IDcard":
-        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard."); 
+        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard.");
+      case "IDnomo":
+      return Promise.resolve("This ID belongs to Nomo Bouchard.");
       case "wallet":
-         return Promise.resolve("It has some cash inside but nothing else.");     
+         return Promise.resolve("It has some cash inside but nothing else.");
+         case "phone":
+          return Promise.resolve("You tap on the phone and attempt to unlock it but can’t get past the lockscreen. ");         
       default:
         return Promise.resolve(`You examine the ${objectToExamine} and find nothing noteworthy.`);
     }
@@ -462,6 +490,7 @@ export const take = (args: string[]): Promise<string> => {
   if (currentLocation.items[index] === "phone") {
     if (!phonePickedUp) {
       const dialogSequence = [
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------\n",
         "YOU: 'Hello?'\n",
         "VOICE: 'HELLO—Ope—ray'\n",
         "YOU: 'I'm sorry. I can't hear you very well, I—'\n",
@@ -473,7 +502,8 @@ export const take = (args: string[]): Promise<string> => {
         "VOICE: '—we have to manually disconnect you if you don't make it there in time. Make your way out of the hospital and head to the weapons room.'\n\n",
         "The phone emits a shrieking noise so loud you almost drop it. \n\n\n",
         "YOU: 'Hello?'\n\n\n\n...\n\n\n\nYOU: 'Hello??'\n\n\n",
-        "The call has ended."
+        "The call has ended.\n",
+        "--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------"
       ];
 
       phonePickedUp = true;
