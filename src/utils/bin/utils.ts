@@ -61,6 +61,7 @@ x       │  Dahae                         │       │                        
 You open your eyes, feeling disoriented and weak. You seem to be laying down on a hospital bed. Fluorescent lights blare down from the ceiling and you hear the faint hum of electrical units. You look down and see that you are dressed in all white. Your stomach sinks. Something is very wrong. You can't remember who you are or why you're in this room.             
                 
 Type 'help' to see list of available commands.
+Start by typing 'go east' to move around
 `};
 
 interface ObjectDescription {
