@@ -2,7 +2,7 @@ import packageJson from '../../../package.json';
 import * as bin from './index';
 import mysql from 'mysql2/promise';
 
-/** 
+
 const connection = await mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -12,7 +12,7 @@ const connection = await mysql.createConnection({
     ca: process.env.SSL_CERT,
   }
 });
-
+/** 
 export const email = async (emailAddress: string): Promise<string> => {
   if (!emailAddress) {
     return "Please provide an email address to save.";
