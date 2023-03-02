@@ -8,9 +8,9 @@ const connection = await mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-    ssl: {
-    ca: process.env.SSL_CERT,
-  }
+    //ssl: {
+ //   ca: process.env.SSL_CERT,
+ // }
 });
 /** 
 export const email = async (emailAddress: string): Promise<string> => {
