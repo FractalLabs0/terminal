@@ -13,6 +13,16 @@ const connection = await mysql.createConnection({
   }
 });
 
+export const email = async (emailAddress: string): Promise<string> => {
+  if (!emailAddress) {
+    return "Please provide an email address to save.";
+  }
+
+  const [rows] = await connection.execute('INSERT INTO emails (email) VALUES (?)', [emailAddress]);
+
+  return `Email address ${emailAddress} saved successfully.`;
+};
+
 
 export const help = async (args: string[]): Promise<string> => {
   const commands = [
@@ -211,16 +221,6 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   plaqueDescription: { id: "plaqueDescription", description: "I wonder where lecture halls A and B are…" },
   holoscreenDescription: { id: "holoscreenDescription", description: "The professor who last used this didn't do a very good job wiping the screen clean." },
   flowerDescription: { id: "flowerDescription", description: "They are brightly colored, trumpet-shaped blooms" },
-};
-
-export const email = async (emailAddress: string): Promise<string> => {
-  if (!emailAddress) {
-    return "Please provide an email address to save.";
-  }
-
-  const [rows] = await connection.execute('INSERT INTO emails (email) VALUES (?)', [emailAddress]);
-
-  return `Email address ${emailAddress} saved successfully.`;
 };
 
 export const examine = (args: string[]): Promise<string> => {
