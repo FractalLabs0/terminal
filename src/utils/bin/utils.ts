@@ -2,7 +2,7 @@ import packageJson from '../../../package.json';
 import * as bin from './index';
 import mysql from 'mysql2/promise';
 
-
+/** 
 const connection = await mysql.createConnection({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
@@ -22,7 +22,7 @@ export const email = async (emailAddress: string): Promise<string> => {
 
   return `Email address ${emailAddress} saved successfully.`;
 };
-
+*/
 
 export const help = async (args: string[]): Promise<string> => {
   const commands = [
