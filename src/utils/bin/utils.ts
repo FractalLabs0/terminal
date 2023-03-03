@@ -1,42 +1,5 @@
 import packageJson from '../../../package.json';
 import * as bin from './index';
-const mysql = require('mysql');
-
-export const email = (emailAddress) => {
-  return new Promise((resolve, reject) => {
-    if (!emailAddress) {
-      reject("Please provide an email address to save.");
-      return;
-    }
-
-    const connection = mysql.createConnection({
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASS,
-      database: process.env.DB_NAME,
-      ssl: {
-        ca: process.env.SSL_CERT,
-      },
-    });
-
-    connection.connect((err) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-
-      connection.query('INSERT INTO emails (email) VALUES (?)', [emailAddress], (error, results, fields) => {
-        if (error) {
-          reject(error);
-          return;
-        }
-
-        connection.end();
-        resolve(`Email address ${emailAddress} saved successfully.`);
-      });
-    });
-  });
-};
 
 
 
