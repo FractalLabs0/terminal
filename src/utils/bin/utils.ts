@@ -59,7 +59,7 @@ x       │  Dahae                         │       │                        
         x                                    x      x        x Rift
                 Rift          x                        x
 
-You open your eyes, feeling disoriented and weak. You seem to be laying down on a hospital bed. Fluorescent lights blare down from the ceiling and you hear the faint hum of electrical units. You look down and see that you are dressed in all white. Your stomach sinks. Something is very wrong. You can't remember who you are or why you're in this room.
+You open your eyes, feeling disoriented and weak. You seem to be lying down on a hospital bed. Fluorescent lights blare down from the ceiling and you hear the faint hum of electrical units. You look down and see that you are dressed in all white. Your stomach sinks. Something is very wrong. You can't remember who you are or why you're in this room.
 
 You are in a sparsely furnished hospital bedroom. There is a plain bed in the center of the room, a small window in the corner, and an open door to the east. By the bed is a tray with some scraps of food. 
 
