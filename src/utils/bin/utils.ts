@@ -112,7 +112,7 @@ const locations: { [key: string]: Location } = {
   },
   lobby: {
     name: "Hospital Lobby",
-    description: "You find yourself in a vast underground facility.",
+    description: "You are in the hospital lobby. You can see a long corridor to the east and an exit to the south. On the wall is a sign that reads: St. Dymphna Behavioral Health Hospital. There is no one in the lobby except for one robot nurse, patrolling the empty lobby with a smile.",
     items: [],
     objects: { sign: { id: "sign", descriptionId: "signDescription" } },
     exits: { west: "bedroom", south: "sidewalk1", east: "medroom" },
@@ -174,7 +174,7 @@ const locations: { [key: string]: Location } = {
   lecturehall: {
     name: "Lecture Hall",
     description: "You walk inside a large, empty room filled with rows of seats. There is a plaque by the door with the words: “University of Newmont: Lecture Hall C”. A blank holoscreen commands most of the wall behind the lectern, glowing faintly with traces of mathematical equations from a previous class. You hear the faintest echo of footsteps from outside the lecture hall.\nA student ID card lays on the floor. Someone must have dropped it. ",
-    items: ["IDnomo"],
+    items: ["ID"],
     objects: { plaque: { id: "plaque", descriptionId: "plaqueDescription" }, holoscreen: { id: "holoscreen", descriptionId: "holoscreenDescription" } },
     exits: { north: "library", south: "sidewalk3" },
   },
@@ -345,7 +345,7 @@ const objectDescriptions: { [key: string]: ObjectDescription } = {
   terminal2Description: { id: "terminal2Description", description: "You wonder if valid passwords could be related to Dahae's products..." },
 };
 //create a function "23QPX6" taht returns a string. This function must be called writing exactly 23QPX6.
-export const _23QPX6 = (): Promise<string> => {
+export const Q23QPX6 = (): Promise<string> => {
   if (currentLocation === locations.terminal) {
   return Promise.resolve(`TERMINAL: Welcome back, Final Development Team member! You now have access to FDT common files. Enter your ID and password to access your personal files.
 
@@ -356,7 +356,7 @@ export const _23QPX6 = (): Promise<string> => {
 else {
   return Promise.resolve(`You remember the etching on your AR BuddyBot. You don't find any way to use that here...`);
 }};
-export const _23qpx6 = (): Promise<string> => {
+export const q23qpx6 = (): Promise<string> => {
   if (currentLocation === locations.terminal) {
     return Promise.resolve(`TERMINAL: Welcome back, Final Development Team member! You now have access to FDT common files. Enter your ID and password to access your personal files.
   
@@ -395,11 +395,11 @@ export const examine = (args: string[]): Promise<string> => {
       case "magazine":
       return Promise.resolve("“Current Signals” magazine seems to be a tech-focused lifestyle publication. You flip through it and find nothing that interests you. It is mostly written in English with small sections in Kyoreugul.");
       case "coat":
-        inventory.push("IDcard");
-        return Promise.resolve("A doctor's hospital ID falls out of the coat!");    
-      case "IDcard":
-        return Promise.resolve("This ID belongs to a Dr. Jian Bouchard.");
-      case "IDnomo":
+        inventory.push("pass");
+        return Promise.resolve("A doctor's hospital pass falls out of the coat!");    
+      case "pass":
+        return Promise.resolve("This pass belongs to a Dr. Jian Bouchard.");
+      case "ID":
       return Promise.resolve("This ID belongs to Nomo Bouchard.");
       case "thumbdrive":
         return Promise.resolve("The device is compact. Its shell is made out of a sturdy matte black plastic. The lanyard attached to it has a company name printed on it: OCELLUS CORP.");
@@ -577,13 +577,13 @@ const npcs: { [key: string]: NPC } = {
     dialogOptions: {
       "1": {
         message: "Where am I?",
-        responseMessage: " You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
+        responseMessage: "ROBONURSE: You are in St. Dymphna Behavioral Health Hospital, located in Newmont. We are the highest rated mental health facility in the G.S.A. You are safe here but you MUST GO. BACK. TO. YOUR. ROOM."
            },
       "2": { message: "I don't belong here." ,
-           responseMessage: "You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
+           responseMessage: "ROBONURSE: You belong here. You don't have a visitor's pass and you are not a staff member. Therefore, you are an in-patient of our mental health facility. If you don't want a rules violation on your record, you MUST GO BACK TO YOUR ROOM NOW."
            },
       "3": { message: "I'm trying to leave." ,
-           responseMessage: "You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
+           responseMessage: "ROBONURSE: You are a patient and you cannot leave without a medical clearance from one of our doctors. For your health and safety, please GO BACK TO YOUR ROOM. "
            },             
     },
   },
@@ -593,7 +593,7 @@ const npcs: { [key: string]: NPC } = {
     dialogOptions: {
       "1": {
         message: "Hey, I'm a little lost…",
-        responseMessage: "“Okay…?” She says with a hesitant smile. “So can I help you…?”\nShe seems a little creeped out.\nYou shake your head and mumble, “Nevermind.”"
+        responseMessage: "GIRL: “Okay…?” She says with a hesitant smile. “So can I help you…?”\nShe seems a little creeped out.\n\nYou shake your head and mumble, “Nevermind.”"
            },
       "2": { message: "What is this place?" ,
            responseMessage: "She looks at you for a second before pointing to the giant sign by the door that says: University of Newmont: Caron Library."
@@ -666,10 +666,10 @@ const displayLocation = (): string => {
 
   //robotcheck ID card
   if (currentLocation.npc?.toLowerCase() === "robonurse") {
-    if (inventory.includes("IDcard")) {
+    if (inventory.includes("pass")) {
       npcs.robonurse.dialogOptions["4"] = {
         message: "(hidden option) Show her your hospital ID card.",
-        responseMessage: "Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
+        responseMessage: "ROBONURSE: Hello, Dr. Bouchard! You are currently scheduled as OFF DUTY. You have ZERO messages. Have a nice day!"
       };
     } else {
       delete npcs.robonurse.dialogOptions["4"];
@@ -702,7 +702,7 @@ const displayLocation = (): string => {
       npcs.door.dialogOptions["5"] = {
         message: "(hidden option) (attempt) Use the lockpick set you found on the Ocellus HQ rooftop.",
         requiresItem: "lockpick",
-        responseMessage: "You use the lockpick set and manage to undo all three locks with relative ease. The door is now unlocked. It is pitch black on the other side of that door. A seemingly unknowable abyss yawns in front of you."
+        responseMessage: "You use the lockpick set and manage to undo all three locks with relative ease.\n The door is now unlocked."
       };
     } else {
       delete npcs.door.dialogOptions["5"];
@@ -722,11 +722,11 @@ const displayLocation = (): string => {
 
   //girlcheck
   if (currentLocation.npc?.toLowerCase() === "girl") {
-    if (inventory.includes("IDnomo")) {
+    if (inventory.includes("ID")) {
       npcs.girl.dialogOptions["4"] = {
         message: "(hidden option) Show her Nomo Bouchard's student ID card.",
-        requiresItem: "IDnomo",
-        responseMessage: "“Oh my gosh!” she exclaims, drawing some irritated looks from the other students. “This is my friend's card. I'm sorry, do you know Nomo?”\nYou lie and say that you do.\nYou can tell that she can tell that you're lying.\n\n“O-okay… well, I'll just take this,” she takes the ID card from your hand. “He and I both intern at FRV, so I'll give it to him later today when I see him.”\nThe two of you stare at each other in awkward silence.\n“Thanks,” she says, then turns away."
+        requiresItem: "ID",
+        responseMessage: "GIRL: “Oh my gosh!” she exclaims, drawing some irritated looks from the other students. “This is my friend's card. I'm sorry, do you know Nomo?”\n\nYou lie and say that you do.\nYou can tell that she can tell that you're lying.\n\nGIRL: “O-okay… well, I'll just take this,” she takes the ID card from your hand. “He and I both intern at FRV, so I'll give it to him later today when I see him.”\nThe two of you stare at each other in awkward silence.\n\nGIRL: “Thanks,” she says, then turns away."
       };
     } else {
       delete npcs.girl.dialogOptions["4"];
@@ -869,8 +869,8 @@ const handleItemExchange = (item: string, responseMessage: string): string | und
     return responseMessage;
   }
 
-  if (item === "IDnomo") {
-    const index = inventory.indexOf("IDnomo");
+  if (item === "ID") {
+    const index = inventory.indexOf("ID");
     if (index === -1) {
       return `You don't have the necessary item to select that option.`;
     }
@@ -913,7 +913,7 @@ if (currentLocation.exits[direction] === "weaponsroom" && currentLocation === lo
 }
 
   //make sure the player can't leave the hospital without the ID card
-  if (currentLocation.exits[direction] === "sidewalk1" && currentLocation===locations.lobby && !inventory.includes("IDcard")) {
+  if (currentLocation.exits[direction] === "sidewalk1" && currentLocation===locations.lobby && !inventory.includes("pass")) {
     return "You cannot exit the hospital. The robot nurse is watching you closely.";
   }
   if (currentLocation.exits[direction] === "rooftop" && currentLocation===locations.ocellus && !inventory.includes("roofaccess")) {
@@ -1073,7 +1073,7 @@ export const sneak = (args: string[]): Promise<string> => {
             case "guard":
               locations.frv.npc = undefined;
               inventory.push("stairsaccess");
-              currentLocation.description +="\nYou can see the guard's feet poking behind beanbag...\n\n Better not stay here too long";
+              currentLocation.description +="\nYou can see the guard's feet poking behind the beanbag...\n\n Better not stay here too long";
               return Promise.resolve(`YOU: “Hey… is that an ice cold can of Le Zeste over there?”\n\nYou point towards an unopened can of soda someone left behind. The parched guard sees it and lunges towards it, as if he's worried about its rightful owner coming back to reclaim it. In his haste, he slips on the tile floor and lands on his head with a thud.\n\nYou had intended to sneak past him but it looks like he's out cold.\nYou push one of the beanbags in front of the unconscious guard to hide his limp body, then make your way to the stairs.`);
           default:
         return Promise.resolve(`There's no point sneaking past ${npce.name}`);
