@@ -36,7 +36,12 @@ export const banner = (args?: string[]): string => {
  ##::::::: ##::. ##:: ##.... ##: ##::: ##:::: ##:::: ##.... ##: ##:::::::
  ##::::::: ##:::. ##: ##:::: ##:. ######::::: ##:::: ##:::: ##: ########:
 ..::::::::..:::::..::..:::::..:::......::::::..:::::..:::::..::........::
-                                     
+-----------------------------------------------------------
+twitter: https://twitter.com/FractalLabsOrg
+reddit : https://www.reddit.com/r/FractalAi/
+discord: (...coming soon...)
+wiki   : https://fractal-labs.fandom.com/wiki/Fractal_Labs_Wiki
+-----------------------------------------------------------                                     
                         x         x                                      x
           x     x            x                           x      Rift        x
             x    x  Rift      x      x           x     x         x        x
