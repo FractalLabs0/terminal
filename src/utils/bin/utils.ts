@@ -46,14 +46,14 @@ wiki   : https://fractal-labs.fandom.com/wiki/Fractal_Labs_Wiki
           x     x            x                           x      Rift        x
             x    x  Rift      x      x           x     x         x        x
       x ┌────────────────────────────────┐       ┌──────────────────────────────┐
-        │     NOMO'S HOMEWORLD           │   Rift│            GUL1M22           │
+        │           EARTH 8              │   Rift│           GUL1M22            │
  x   x  │                                │       │                              │
         │         DEPT. 33               │       │                              │ x
   Rift  │                                │       │                              │
         │  Sentrysoft©                   │       │                              │
         │                               xxxxx┼xxxxx                             ├────────► ...The Fractal Labs simulation size 
 x       │  Dahae                         │       │                              │ x           is limited by the organisation ressources. 
-        │                                │ Nomo  │                              │             The simulation grows as Fractal Labs augments its capacities...
+        │                                │       │                              │             The simulation grows as Fractal Labs augments its capacities...
     x   │  Company3                      │       │                              │
         │                                │       │                              │
  x      │  Company4                      │       │                              │
